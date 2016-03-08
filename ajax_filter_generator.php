@@ -72,6 +72,17 @@ class ajax_filter_generator
 					<?php
 					}
 				}
+				else if($column['type'] == 'radio_button')
+				{
+					$terms = get_terms($column['taxonomy']);
+					foreach($terms as $term)
+					{
+						$radio_button_id = $column_id . '_' . $term->term_id;
+					?>
+				<label for="<?php echo $radio_button_id;?>"><input type="radio" name="<?php echo $column_name;?>" id="<?php echo $radio_button_id;?>" value="<?php echo $term->term_id; ?>"> <?php echo $term->name;?></label>
+					<?php
+					}
+				}
 				else if ($column['type'] == 'text')
 				{
 					?>
@@ -116,6 +127,23 @@ class ajax_filter_generator
 
 		$this->mapped_columns[$column_name]['taxonomy'] = $taxonomy_name;
 		$this->mapped_columns[$column_name]['type'] 	= 'checkbox';
+
+		return $this;
+	}
+
+	/**
+	 * Set the taxonomy name and the input type to radiobutton.
+	 * 
+	 * @param  string $taxonomy_name The technical taxonomy name
+	 * @param  string $column_name Optional: the column_name. Else we will use $this->currently_working_on
+	 */
+	public function set_radio_button($taxonomy_name, $column_name = null)
+	{
+		if($column_name == null)
+			$column_name = $this->currently_working_on;
+
+		$this->mapped_columns[$column_name]['taxonomy'] = $taxonomy_name;
+		$this->mapped_columns[$column_name]['type'] 	= 'radio_button';
 
 		return $this;
 	}

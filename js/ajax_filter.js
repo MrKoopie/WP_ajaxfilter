@@ -21,13 +21,15 @@ jQuery(document).ready(function($) {
 
 		// When found, find all checkboxes and text fields to submit
 		$(this).find(':input').each(function(index, value){
-
 			if(
 					// Support for a text input
 					($(this).attr('type') == 'text')
 
 					// Support for a checkbox
-					|| ($(this).attr('type') == 'checkbox' && $(this).is(':checked') )
+					|| ($(this).attr('type') == 'checkbox' && $(this).is(':checked'))
+
+					// Support for a radio button
+					|| ($(this).attr('type') == 'radio' && $(this).is(':checked'))
 					)
 			{
 				// Store the input value
@@ -38,9 +40,6 @@ jQuery(document).ready(function($) {
 		});
 
 		filter_data = encodeURIComponent(filter_data.join('&'));
-
-		// if(filter_data == '')
-		// 	return false;// There is nothing to do
 
 		// Set the loading screen
 		$( html_block ).html( "Laden..." );

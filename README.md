@@ -94,6 +94,7 @@ After defining the column, you need to set the column type. Currently the follow
 $filter_generator = new MrKoopie\WP_ajaxfilter\ajax_filter_generator();
 $filter_generator->set_text(); // Shows a textarea
 $filter_generator->set_checkbox('taxonomy_id'); // Shows all values in taxonomy_id as an checkbox.
+$filter_generator->set_radio_button('taxonomy_id'); // Shows all values in taxonomy_id as an checkbox.
 ```
 
 # FAQ
