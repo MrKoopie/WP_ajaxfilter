@@ -13,7 +13,7 @@ namespace MrKoopie\WP_ajaxfilter;
 /**
 * Process every filter
 */
-class ajax_filter_generator
+class ajax_filter_generator extends ajax_filter
 {
 	protected $mapped_columns_sort;
 	protected $mapped_columns; // key = input field, data = tech name
@@ -72,7 +72,10 @@ class ajax_filter_generator
 					{
 						$checkbox_id = $column_id . '_' . $term->term_id;
 					?>
-				<label for="<?php echo $checkbox_id;?>"><input type="checkbox" name="<?php echo $column_name;?>" id="<?php echo $checkbox_id;?>" value="<?php echo $term->term_id; ?>"> <?php echo $term->name;?></label>
+				<label for="<?php echo $checkbox_id;?>"><input type="checkbox" name="<?php echo $column_name;?>" id="<?php echo $checkbox_id;?>" value="<?php echo $term->term_id; ?>"<?php
+						if(array_search($term->term_id, $this->filter_data[$column_name] ) !== false)
+							echo ' checked';
+						?>> <?php echo $term->name;?></label>
 					<?php
 					}
 				}
@@ -86,14 +89,19 @@ class ajax_filter_generator
 					{
 						$radio_button_id = $column_id . '_' . $term->term_id;
 					?>
-				<label for="<?php echo $radio_button_id;?>"><input type="radio" name="<?php echo $column_name;?>" id="<?php echo $radio_button_id;?>" value="<?php echo $term->term_id; ?>"> <?php echo $term->name;?></label>
+				<label for="<?php echo $radio_button_id;?>"><input type="radio" name="<?php echo $column_name;?>" id="<?php echo $radio_button_id;?>" value="<?php echo $term->term_id; ?>"<?php
+						if(array_search($term->term_id, $this->filter_data[$column_name] ) !== false)
+							echo ' checked';
+						?>> <?php echo $term->name;?></label>
 					<?php
 					}
 				}
 				else if ($column['type'] == 'text')
 				{
 					?>
-					<input type="text" name="<?php echo $column_name;?>"><br>
+					<input type="text" name="<?php echo $column_name;?>"<?php
+					if(isset($this->filter_data[ $column_name]))
+						echo ' value="' . htmlentities( $this->filter_data[ $column_name ][0] ).'"'; ?><br>
 					<?php
 				}
 			} // End foreach

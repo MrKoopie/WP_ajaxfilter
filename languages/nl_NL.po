@@ -1,0 +1,26 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-03-09 10:07+0100\n"
+"PO-Revision-Date: 2016-03-09 10:12+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ajax_filter_generator.php:67 ajax_filter_generator.php:85
+msgid "Deselect all"
+msgstr "Deselecteer alles"
+
+#: ajax_filter_generator.php:109
+msgid "Filter"
+msgstr "Filteren"
+
+#. Plugin Name of the plugin/theme
+msgid "MrKoopie\\WP_ajaxfilter"
+msgstr "MrKoopie\\WP_ajaxfilter"

@@ -52,3 +52,13 @@ if(!function_exists('MrKoopie_autoloader'))
 
 	spl_autoload_register('MrKoopie_autoloader');
 }
+
+/**
+ * Load the language files
+ */
+
+add_action('after_setup_theme', 'MRK_WP_ajaxfilter_init');
+function MRK_WP_ajaxfilter_init()
+{
+    load_theme_textdomain('WP_ajaxfilter', MRK_include_path . '/MrKoopie/WP_ajaxfilter/languages');
+}
