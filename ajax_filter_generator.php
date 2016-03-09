@@ -73,7 +73,7 @@ class ajax_filter_generator extends ajax_filter
 						$checkbox_id = $column_id . '_' . $term->term_id;
 					?>
 				<label for="<?php echo $checkbox_id;?>"><input type="checkbox" name="<?php echo $column_name;?>" id="<?php echo $checkbox_id;?>" value="<?php echo $term->term_id; ?>"<?php
-						if(array_search($term->term_id, $this->filter_data[$column_name] ) !== false)
+						if(isset($this->filter_data[$column_name]) && array_search($term->term_id, $this->filter_data[$column_name] ) !== false)
 							echo ' checked';
 						?>> <?php echo $term->name;?></label>
 					<?php
@@ -90,7 +90,7 @@ class ajax_filter_generator extends ajax_filter
 						$radio_button_id = $column_id . '_' . $term->term_id;
 					?>
 				<label for="<?php echo $radio_button_id;?>"><input type="radio" name="<?php echo $column_name;?>" id="<?php echo $radio_button_id;?>" value="<?php echo $term->term_id; ?>"<?php
-						if(array_search($term->term_id, $this->filter_data[$column_name] ) !== false)
+						if(isset($this->filter_data[$column_name]) && array_search($term->term_id, $this->filter_data[$column_name] ) !== false)
 							echo ' checked';
 						?>> <?php echo $term->name;?></label>
 					<?php
