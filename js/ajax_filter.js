@@ -61,4 +61,16 @@ jQuery(document).ready(function($) {
 		
 	}); 
 
+	$("a[data-MRK-deselect-target]").on('click', function(){
+		var name = "input[name='" + $(this).attr('data-MRK-deselect-target') + "']";
+
+		console.log('click detected')
+		console.log( name );
+		$(name).each(function(){
+			console.log($(this));
+			$(this).prop('checked', false);
+
+		});
+	})
+
 });

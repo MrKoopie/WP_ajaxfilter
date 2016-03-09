@@ -63,6 +63,10 @@ class ajax_filter_generator
 				// Show the configured html code.
 				if($column['type'] == 'checkbox')
 				{
+					// Allow the user to deselect all boxes
+					echo '<a href="#" class="deselect" data-MRK-deselect-target="' . $column_name . '">'.__('Deselect all', 'WP_ajaxfilter').'</a>';
+
+
 					$terms = get_terms($column['taxonomy']);
 					foreach($terms as $term)
 					{
@@ -74,6 +78,9 @@ class ajax_filter_generator
 				}
 				else if($column['type'] == 'radio_button')
 				{
+					// Allow the user to deselect all boxes
+					echo '<a href="#" class="deselect" data-MRK-deselect-target="' . $column_name . '">'.__('Deselect all', 'WP_ajaxfilter').'</a>';
+
 					$terms = get_terms($column['taxonomy']);
 					foreach($terms as $term)
 					{
@@ -91,7 +98,7 @@ class ajax_filter_generator
 				}
 			} // End foreach
 		?>
-			<input type="submit" value="Filteren" class="<?php echo $class;?>">
+			<input type="submit" value="<?php _e('Filter', 'WP_ajaxfilter');?>" class="<?php echo $class;?>">
 		</form>
 		<?php
 		
