@@ -1,0 +1,6 @@
+formatter.name: pretty
+suites:
+    todo_suite:
+        namespace: MrKoopie\WP_ajaxfilter
+        psr4_prefix: MrKoopie\WP_ajaxfilter
+        src: src
