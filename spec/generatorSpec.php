@@ -7,10 +7,24 @@ use Prophecy\Argument;
 
 class generatorSpec extends ObjectBehavior
 {
+	private $prophet;
+
 	protected $default = [
 						'field_name' 	=> 'some_field',
 						'translation'	=> 'some translation',
+						'taxonomy_name'	=> 'categories',
+						'data_array'	=> ['key' => 'value']
 					];
+
+	/**
+	 * Initialize the class
+	 */
+	public function let()
+	{
+		$this->prophet = new \Prophecy\Prophet;
+		$WP_wrapper    = $this->prophet->prophesize('MrKoopie\WP_wrapper\WP_wrapper');
+		$this->beConstructedWith($WP_wrapper);
+	}
 
 	public function it_is_initializable()
 	{
@@ -20,7 +34,7 @@ class generatorSpec extends ObjectBehavior
 	public function it_can_add_a_field()
 	{
 		// Add the field
-		$return_add_field 	= $this->add_field($this->default['translation'], $this->default['field_name'])
+		$return_add_field     = $this->add_field($this->default['translation'], $this->default['field_name'])
 								   ->shouldBe($this);
 
 		
@@ -53,10 +67,6 @@ class generatorSpec extends ObjectBehavior
 								'type'			=> 'checkbox'
 							  ];
 
-		// Set the checkbox via the general setter
-		$this->set_as('checkbox')
-			 ->shouldReturn($this);
-
 		// Set the checkbox
 		$this->set_as_checkbox()
 			 ->shouldReturn($this);
@@ -77,10 +87,6 @@ class generatorSpec extends ObjectBehavior
 								'type'			=> 'radiobutton'
 							  ];
 
-		// Set the radiobutton via the general setter
-		$this->set_as('radiobutton')
-			 ->shouldReturn($this);
-
 		// Set the radiobutton
 		$this->set_as_radiobutton()
 			 ->shouldReturn($this);
@@ -100,10 +106,6 @@ class generatorSpec extends ObjectBehavior
 								'translation' 	=> $this->default['translation'],
 								'type'			=> 'dropdown'
 							  ];
-		
-		// Set the dropdown via the general setter
-		$this->set_as('dropdown')
-			 ->shouldReturn($this);
 
 		// Set the dropdown
 		$this->set_as_dropdown()
@@ -124,10 +126,6 @@ class generatorSpec extends ObjectBehavior
 								'translation' 	=> $this->default['translation'],
 								'type'			=> 'text'
 							  ];
-		
-		// Set the text via the general setter
-		$this->set_as('text')
-			 ->shouldReturn($this);
 
 		// Set the dropdown
 		$this->set_as_text()
@@ -143,15 +141,47 @@ class generatorSpec extends ObjectBehavior
 	*                                                                 *
 	******************************************************************/
 
-	// public function it_can_load_data_from_a_taxonomy()
-	// {
-	// 	// @todo
-	// }
+	public function it_can_load_data_from_a_taxonomy()
+	{
+		// Preload the required fields
+		$this->preload_one_field();
 
-	// public function it_can_load_data_from_an_array()
-	// {
-	// 	// @todo
-	// }
+		// Load the data
+		$this->load_data_from_a_taxonomy($this->default['taxonomy_name'])
+			 ->shouldReturn($this);
+
+		// Set the expected settings
+		$expected_mapped_fields[]    	= [
+								'name'               => $this->default['field_name'],
+								'translation'        => $this->default['translation'],
+								'data_source'        => 'taxonomy',
+								'data_taxonomy_name' => $this->default['taxonomy_name']
+							  ];
+
+		$this->get_mapped_fields()
+			 ->shouldBe($expected_mapped_fields);
+	}
+
+	public function it_can_load_data_from_an_array()
+	{
+		// Preload the required fields
+		$this->preload_one_field();
+
+		// Load the data
+		$this->load_data_from_an_array($this->default['data_array'])
+			 ->shouldReturn($this);
+
+		// Set the expected settings
+		$expected_mapped_fields[]    	= [
+								'name'               => $this->default['field_name'],
+								'translation'        => $this->default['translation'],
+								'data_source'        => 'array',
+								'data_array' 		 => $this->default['data_array']
+							  ];
+
+		$this->get_mapped_fields()
+			 ->shouldBe($expected_mapped_fields);
+	}
 
 
 	/** Used for preloading. We can not do this for every test (it_can_add_a_field does not need this) */

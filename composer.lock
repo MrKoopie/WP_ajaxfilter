@@ -4,9 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c56867e549aafaa9e0ab345e5081dda7",
-    "content-hash": "4f341c050d4c500c8cbb3a7c95dc2211",
+    "hash": "5364370bc71261b5ad56fe68c03b273e",
+    "content-hash": "f8d701c9ba4c2a906fcf681c66ec7be1",
     "packages": [
+        {
+            "name": "mrkoopie/wp_wrapper",
+            "version": "v1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MrKoopie/WP_wrapper.git",
+                "reference": "c0f3c3d5a3893705a6248899dea135d9292cdd04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MrKoopie/WP_wrapper/zipball/c0f3c3d5a3893705a6248899dea135d9292cdd04",
+                "reference": "c0f3c3d5a3893705a6248899dea135d9292cdd04",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpspec/phpspec": "^2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MrKoopie\\WP_wrapper\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Koop",
+                    "email": "mail@danielkoop.me"
+                }
+            ],
+            "description": "Wraps WordPress functions into mockable objects. Used for WP_ajaxfilter.",
+            "time": "2016-03-19 11:52:01"
+        }
+    ],
+    "packages-dev": [
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
@@ -846,7 +884,6 @@
             "time": "2016-02-23 15:16:06"
         }
     ],
-    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

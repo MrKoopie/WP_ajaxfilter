@@ -1,5 +1,8 @@
 {
-    "require": {
+	"require": {
+		"mrkoopie/wp_wrapper": "^1.2"
+	},
+    "require-dev": {
         "phpspec/phpspec": "^2.4"
     },
     "autoload": {
