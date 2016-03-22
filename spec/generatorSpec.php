@@ -246,7 +246,7 @@ class generatorSpec extends ObjectBehavior
 	public function it_can_not_set_an_invalid_method()
 	{
 		$this->shouldThrow('MrKoopie\WP_ajaxfilter\Exceptions\no_such_method_exists_exception')
-			 ->during('set_method', ['erere']);
+			 ->during('set_method', ['invalid_method']);
 			 
 	}
 
