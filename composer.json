@@ -3,7 +3,8 @@
 		"mrkoopie/wp_wrapper": "^1.2"
 	},
     "require-dev": {
-        "phpspec/phpspec": "^2.4"
+        "phpspec/phpspec": "^2.4",
+		"mockery/mockery": "^0.9.4"
     },
     "autoload": {
     	"psr-4": {

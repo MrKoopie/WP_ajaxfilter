@@ -2,17 +2,21 @@
 
 namespace MrKoopie\WP_ajaxfilter;
 use MrKoopie\WP_wrapper\WP_wrapper;
+use Exceptions\No_such_action_method;
 
 class generator
 {
     protected $mapped_fields;
     protected $WP_wrapper;
+    protected $config;
 
     /**
      * WordPress does not have dependency injection.
      */
-    public function __construct($WP_wrapper = null)
+    public function __construct($form_id, $WP_wrapper = null)
     {
+        $this->config['form_id'] = $form_id;
+
         if($WP_wrapper != null)
             $this->WP_wrapper = $WP_wrapper;
         else
@@ -38,6 +42,16 @@ class generator
     public function get_mapped_fields()
     {
         return $this->mapped_fields;
+    }
+
+    /**
+     * Get the config
+     * 
+     * @return  array The config settings.
+     */
+    public function get_config_settings()
+    {
+        return $this->config;
     }
 
     /**
@@ -115,12 +129,23 @@ class generator
      */
     public function load_data_from_a_taxonomy($taxonomy)
     {
+        $terms = $this->WP_wrapper->get_terms($taxonomy);
+
+        $data_array = [];
+
+        foreach($terms as $term)
+        {
+            $data_array[$term->id] = $term->name;
+        }
+        
         return $this->set_mapped_field_config('data_source', 'taxonomy')
-                    ->set_mapped_field_config('data_taxonomy_name', $taxonomy);
+                    ->set_mapped_field_config('data_taxonomy_name', $taxonomy)
+                    ->set_mapped_field_config('data_array', $data_array);
     }
 
     /**
-     * Load data from a taxonomy
+     * Load data from an array.
+     * Input style: ['unique_html_input_field_name' => 'value']
      * 
      * @param  array $array The data.
      * @return  object Returns $this
@@ -129,5 +154,52 @@ class generator
     {
         return $this->set_mapped_field_config('data_source', 'array')
                     ->set_mapped_field_config('data_array', $array);
+    }
+
+    /******************************************************************
+    *                                                                 *
+    *                          CONFIG OPTIONS                         *
+    *                                                                 *
+    ******************************************************************/
+
+    /**
+     * Set the form method
+     * 
+     * @param string $method The method. Can be post or get.
+     */
+    public function set_method($method)
+    {
+        if($method == 'post')
+            $this->config['method'] = 'post';
+
+        elseif($method == 'get')
+            $this->config['method'] = 'get';
+        else
+            throw new Exceptions\no_such_method_exists_exception('The method ' . $method . ' is not supported');
+
+        return $this;
+    }
+
+    /**
+     * Set the action
+     * 
+     * @param string $action The action (URL) where the data should be send to.
+     */
+    public function set_action($action)
+    {
+        $this->config['action'] = $action;
+
+        return $this;
+    }
+
+    /******************************************************************
+    *                                                                 *
+    *                          THE GENERATOR                          *
+    *                                                                 *
+    ******************************************************************/
+
+    public function generate_html()
+    {
+        
     }
 }
