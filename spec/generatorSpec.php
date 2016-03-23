@@ -19,42 +19,10 @@ class generatorSpec extends ObjectBehavior
 						'url'			=> 'http://some_url',
 					];
 
-	/**
-	 * Initialize the class
-	 */
-	public function let()
-	{
-		$this->mockery_WP_wrapper   = Mockery::mock('MrKoopie\WP_wrapper\WP_wrapper');
-		$this->beConstructedWith($this->default['form_id'], $this->mockery_WP_wrapper);
-	}
-
-	public function letGo()
-	{
-		Mockery::close();
-	}
-
 	public function it_is_initializable()
 	{
 		$this->shouldHaveType('MrKoopie\WP_ajaxfilter\generator');
 	}
-
-	public function it_can_add_a_field()
-	{
-		// Add the field
-		$return_add_field     = $this->add_field($this->default['translation'], $this->default['field_name'])
-								   ->shouldBe($this);
-
-		
-		$expected_mapped_fields[]    	= [
-								'name' 			=> $this->default['field_name'],
-								'translation' 	=> $this->default['translation']
-							  ];
-
-		// Check if the mapped fields are set correclty
-		$this->get_mapped_fields()
-			 ->shouldBe($expected_mapped_fields);
-	}
-
 
 	/******************************************************************
 	*                                                                 *
@@ -62,80 +30,68 @@ class generatorSpec extends ObjectBehavior
 	*                                                                 *
 	******************************************************************/
 
-	public function it_can_set_the_field_type_checkbox()
+	public function it_can_add_the_field_type_checkbox()
 	{
-		// Preload the required fields
-		$this->preload_one_field();
-
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
-								'name' 			=> $this->default['field_name'],
 								'translation' 	=> $this->default['translation'],
+								'name'			=> $this->default['field_name'],
 								'type'			=> 'checkbox'
 							  ];
 
 		// Set the checkbox
-		$this->set_as_checkbox()
+		$this->add_checkbox($this->default['translation'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
 			 ->shouldBe($expected_mapped_fields);
 	}
 
-	public function it_can_set_the_field_type_radiobutton()
+	public function it_can_add_the_field_type_radiobutton()
 	{
-		// Preload the required fields
-		$this->preload_one_field();
-
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
-								'name' 			=> $this->default['field_name'],
 								'translation' 	=> $this->default['translation'],
+								'name'			=> $this->default['field_name'],
 								'type'			=> 'radiobutton'
 							  ];
 
 		// Set the radiobutton
-		$this->set_as_radiobutton()
+		$this->add_radiobutton($this->default['translation'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
 			 ->shouldBe($expected_mapped_fields);
 	}
 
-	public function it_can_set_the_field_type_dropdown()
+	public function it_can_add_the_field_type_dropdown()
 	{
-		// Preload the required fields
-		$this->preload_one_field();
-
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
-								'name' 			=> $this->default['field_name'],
 								'translation' 	=> $this->default['translation'],
+								'name'			=> $this->default['field_name'],
 								'type'			=> 'dropdown'
 							  ];
 
 		// Set the dropdown
-		$this->set_as_dropdown()
+		$this->add_dropdown($this->default['translation'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
 			 ->shouldBe($expected_mapped_fields);
 	}
 
-	public function it_can_set_the_field_type_text()
+	public function it_can_add_the_field_type_text()
 	{
-		// Preload the required fields
-		$this->preload_one_field();
-
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
-								'name' 			=> $this->default['field_name'],
 								'translation' 	=> $this->default['translation'],
+								'name'			=> $this->default['field_name'],
 								'type'			=> 'text'
 							  ];
 
 		// Set the dropdown
-		$this->set_as_text()
+		$this->add_textfield($this->default['translation'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
@@ -151,7 +107,7 @@ class generatorSpec extends ObjectBehavior
 	public function it_can_load_data_from_a_taxonomy()
 	{
 		// Preload the required fields
-		$this->preload_one_field();
+		$this->preload_one_checkbox();
 
 
 		// Generate the return value
@@ -174,8 +130,9 @@ class generatorSpec extends ObjectBehavior
 
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
-								'name'               => $this->default['field_name'],
 								'translation'        => $this->default['translation'],
+								'name'               => $this->default['field_name'],
+								'type'				 => 'checkbox',
 								'data_source'        => 'taxonomy',
 								'data_taxonomy_name' => $this->default['taxonomy_name'],
 								'data_array'		 => [ 0 => 'name']
@@ -188,7 +145,7 @@ class generatorSpec extends ObjectBehavior
 	public function it_can_load_data_from_an_array()
 	{
 		// Preload the required fields
-		$this->preload_one_field();
+		$this->preload_one_checkbox();
 
 		// Load the data
 		$this->load_data_from_an_array($this->default['data_array'])
@@ -196,8 +153,9 @@ class generatorSpec extends ObjectBehavior
 
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
-								'name'               => $this->default['field_name'],
 								'translation'        => $this->default['translation'],
+								'name'               => $this->default['field_name'],
+								'type'				 => 'checkbox',
 								'data_source'        => 'array',
 								'data_array' 		 => $this->default['data_array']
 							  ];
@@ -267,31 +225,31 @@ class generatorSpec extends ObjectBehavior
 	}
 
 	/******************************************************************
-	*                                                                 *
-	*                   TESTING GENERATING THE FORM                   *
-	*                                                                 *
-	******************************************************************/
+    *                                                                 *
+    *                             VARIOUS                             *
+    *                                                                 *
+    ******************************************************************/
 	/**
-	 * @todo  this
+	 * Initialize the class
 	 */
-	public function it_can_generate_the_html_code_with_one_field()
+	public function let()
 	{
-		// Preload the required field
-		$this->preload_one_field()
-			 ->set_as_checkbox();
-
-
-		// Generate the HTML
-		$this->generate_html();
-
-
-		
+		$this->mockery_WP_wrapper   = Mockery::mock('MrKoopie\WP_wrapper\WP_wrapper');
+		$this->beConstructedWith($this->default['form_id'], $this->mockery_WP_wrapper);
 	}
 
-
-	/** Used for preloading. We can not do this for every test (it_can_add_a_field does not need this) */
-	public function preload_one_field()
+	public function letGo()
 	{
-		return $this->add_field($this->default['translation'], $this->default['field_name']);
+		Mockery::close();
+	}
+
+	/**
+	 * Used for preloading a field. We do not need this for every test.
+	 * 
+	 * @return object $this object
+	 */
+	public function preload_one_checkbox()
+	{
+		return $this->add_checkbox($this->default['translation'], $this->default['field_name']);
 	}
 }
