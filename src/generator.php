@@ -2,7 +2,7 @@
 
 namespace MrKoopie\WP_ajaxfilter;
 use MrKoopie\WP_wrapper\WP_wrapper;
-use Exceptions\No_such_action_method;
+use MrKoopie\WP_ajaxfilter\Exceptions\no_such_method_exists_exception;
 
 class generator
 {
@@ -145,7 +145,7 @@ class generator
         elseif($method == 'get')
             $this->config['method'] = 'get';
         else
-            throw new Exceptions\no_such_method_exists_exception('The method ' . $method . ' is not supported');
+            throw new no_such_method_exists_exception('The method ' . $method . ' is not supported');
 
         return $this;
     }

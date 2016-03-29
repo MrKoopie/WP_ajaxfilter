@@ -225,6 +225,27 @@ class generatorSpec extends ObjectBehavior
 	}
 
 	/******************************************************************
+	*                                                                 *
+	*                   TESTING GENERATING THE FORM                   *
+	*                                                                 *
+	******************************************************************/
+	/**
+	 * @todo  this
+	 */
+	public function it_can_generate_the_html_code_with_one_field()
+	{
+		// Preload the required field
+		$this->preload_one_checkbox();
+
+
+		// Generate the HTML
+		$this->generate_html();
+
+
+		
+	}
+
+	/******************************************************************
     *                                                                 *
     *                             VARIOUS                             *
     *                                                                 *

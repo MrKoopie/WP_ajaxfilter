@@ -1,0 +1,25 @@
+{
+  "name": "wp_ajaxfilter",
+  "version": "1.0.0",
+  "description": "This package is developed to be a part of a WordPress theme or plugin. By installing this code you can add an advanced filter without writing every piece of HTML, PHP, javascript and CSS code.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrKoopie/WP_ajaxfilter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrKoopie/WP_ajaxfilter/issues"
+  },
+  "homepage": "https://github.com/MrKoopie/WP_ajaxfilter#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-phpspec": "^0.5.4",
+    "gulp-run": "^1.6.12"
+  }
+}
