@@ -10,30 +10,79 @@ composer require mrkoopie/wp_ajaxfilter
 
 Add to your functions.php the following code:
 ```php
+function ajaxfilter($filter_id)
+{
+    if(!isset($GLOBALS['WP_ajaxfilter'][$filter_id]))
+        $GLOBALS['WP_ajaxfilter'][$filter_id] = new MrKoopie/WP_ajaxfilter/generator($filter_id);
+    
+    return $GLOBALS['WP_ajaxfilter'][$filter_id];
+}
+
 require_once('vendor/autoload.php');
 ```
 
-## How to use the code
-Start the HTML generator using the following code:
+## How to use the code in a theme
+The code is designed to have a controller inside your functions.php (or any file that is included in your functions.php) and a simple call in a template file.
+
 ```php
-$g = new MrKoopie/WP_ajaxfilter/generator();
+# functions.php
+/**
+ * Here we configure the ajaxfilter with the form id your_filter_id.
+ * This id should be unique and is used in the template to output
+ * the filter and is used as a selector in jQuery.
+ */
+ajax_filter('your_filter_id')
+							// Configure the input fields
+							->add_text(__('Company'), 's' )
+                            ->add_checkbox(__('Province'), 'taxonomy_province' )
+                            ->add_dropdown(__('Category'), 'taxonomy_category')
+                            ->add_radiobuttons(__('Support'), 'taxonomy_support')
+
+                            // The jQuery script will make an ajax call, set the
+                            // template filter here. The filter will use
+                            // get_template_part('your_ajax_template'), so you
+                            // can use the same input method.
+                            ->set_ajax_template('your_ajax_template')
+
+                            // By running render, we activate the query filter 
+                            // and create the ajax listener.
+                            ->render();
+
+# template.php
+/**
+ * This command outputs the HTML form. Keep in mind that you have to put
+ * a <div id="your_filter_id"></div> somewere!
+ */
+ajax_filter('your_filter_id')->html();
 ```
 
-Use the following code to add a checkbox:
-```php
-$g->add_checkbox( 'label name' ) // The label name is shown in the HTML interface and can be a translated string.
-  ->load_data_from_taxonomy( 'taxonomy_name' ) // You can load data from a taxonomy or array
-  ->comparison(); // The filtered object should match all selected filters. 
-  @todo should I use comparison?
-```
+###### add_text($label, $field = 's' )
+$label is shown in the <label> tag.
+With $field you define the field where the filter applies to. Set this to s (default) to use the default WordPress search fields.
 
-### load_data_from_
-#### array
+###### add_checkbox($label, $taxonomy_id )
+$label is shown in the <label> tag.
+$taxonomy_id is the id of the taxonomy where the data is loaded of.
 
-#### taxonomy
+###### add_dropdown($label, $taxonomy_id )
+$label is shown in the <label> tag.
+$taxonomy_id is the id of the taxonomy where the data is loaded of.
 
-## match_all() and match_any()
-With $g->match_all() the object must match all the set filters for the speci
+###### add_radiobuttons($label, $taxonomy_id )
+$label is shown in the <label> tag.
+$taxonomy_id is the id of the taxonomy where the data is loaded of.
+
+##### set_ajax_template($template_name)
+$template_name is the name of your template inside your theme. This template is used to show the results of the filter.
+
+##### render()
+With this function the query filter is set and the ajax call is registered.
+
+# Todo
+Add support for:
+
+- Pretty technical names
+- Comparison methods
 
 
 # FAQ
@@ -42,4 +91,7 @@ With $g->match_all() the object must match all the set filters for the speci
 A plugin would require a GUI in the back-end, which is not provided by this package. This package is designed to be used within a theme or a plugin, to make the life of a developer easier.
 
 ### Why are you using Mockery for mocking?
-The [developers](https://github.com/phpspec/prophecy/issues/44) of Prophecy did not include support for magic functions like __call(). Although they do have a point, in this case we need to use __call in order to mock WordPress functions without predefining every possible WordPress function. 
+The [developers](https://github.com/phpspec/prophecy/issues/44) of Prophecy did not include support for magic functions like __call(). Although they do have a point, in this case we need to use __call in order to mock WordPress functions without predefining every possible WordPress function.
+
+# Credits
+Jasper Kums, Eenvoud Media B.V. - For providing feedback.
