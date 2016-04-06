@@ -7,6 +7,7 @@ use MrKoopie\WP_ajaxfilter\Exceptions\no_such_method_exists_exception;
 class configurator
 {
     protected $mapped_fields;
+    protected $input_data;
     protected $WP_wrapper;
     protected $config;
 
@@ -32,13 +33,13 @@ class configurator
     /**
      * Sets the last field type to checkbox
      *
-     * @param  string $translation The translation of the field.
-     * @param  string $name The field name of the field.
+     * @param  string $label The translation of the field.
+     * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_checkbox($translation, $name = null)
+    public function add_checkbox($label, $taxonomy_id, $tech_name = null)
     {
-        $this->add_field($translation, $name);
+        $this->add_field_with_taxonomy($label, $taxonomy_id, $tech_name);
 
         return $this->set_field_config('type', 'checkbox');
     }
@@ -46,13 +47,13 @@ class configurator
     /**
      * Sets the last field type to radiobutton
      *
-     * @param  string $translation The translation of the field.
-     * @param  string $name The field name of the field.
+     * @param  string $label The translation of the field.
+     * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_radiobutton($translation, $name = null)
+    public function add_radiobutton($label, $taxonomy_id, $tech_name = null)
     {
-        $this->add_field($translation, $name);
+        $this->add_field_with_taxonomy($label, $taxonomy_id, $tech_name);
 
         return $this->set_field_config('type', 'radiobutton');
     }
@@ -60,13 +61,13 @@ class configurator
     /**
      * Sets the last field type to dropdown
      *
-     * @param  string $translation The translation of the field.
-     * @param  string $name The field name of the field.
+     * @param  string $label The translation of the field.
+     * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_dropdown($translation, $name = null)
+    public function add_dropdown($label, $taxonomy_id, $tech_name = null)
     {
-        $this->add_field($translation, $name);
+        $this->add_field_with_taxonomy($label, $taxonomy_id, $tech_name);
 
         return $this->set_field_config('type', 'dropdown');
     }
@@ -74,56 +75,15 @@ class configurator
     /**
      * Sets the last field type to text
      *
-     * @param  string $translation The translation of the field.
-     * @param  string $name The field name of the field.
+     * @param  string $label The translation of the field.
+     * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_textfield($translation, $name = null)
+    public function add_textfield($label, $tech_name = null)
     {
-        $this->add_field($translation, $name);
+        $this->add_field($label, $tech_name);
 
         return $this->set_field_config('type', 'text');
-    }
-
-    /******************************************************************
-    *                                                                 *
-    *                        DATA LOAD METHODS                        *
-    *                                                                 *
-    ******************************************************************/
-
-    /**
-     * Load data from a taxonomy
-     * 
-     * @param  string $taxonomy The technical name of a taxonomy
-     * @return  object Returns $this
-     */
-    public function load_data_from_a_taxonomy($taxonomy)
-    {
-        $terms = $this->WP_wrapper->get_terms($taxonomy);
-
-        $data_array = [];
-
-        foreach($terms as $term)
-        {
-            $data_array[$term->id] = $term->name;
-        }
-        
-        return $this->set_field_config('data_source', 'taxonomy')
-                    ->set_field_config('data_taxonomy_name', $taxonomy)
-                    ->set_field_config('data_array', $data_array);
-    }
-
-    /**
-     * Load data from an array.
-     * Input style: ['unique_html_input_field_name' => 'value']
-     * 
-     * @param  array $array The data.
-     * @return  object Returns $this
-     */
-    public function load_data_from_an_array($array)
-    {
-        return $this->set_field_config('data_source', 'array')
-                    ->set_field_config('data_array', $array);
     }
 
     /******************************************************************
@@ -162,17 +122,21 @@ class configurator
         return $this;
     }
 
-    /******************************************************************
-    *                                                                 *
-    *                          THE GENERATOR                          *
-    *                                                                 *
-    ******************************************************************/
-
-    public function generate_html()
+    /**
+     * Load the input data
+     *
+     * @param $input_data
+     * @return array|bool
+     */
+    public function load_input_data($input_data)
     {
-        
-    }
+        if(!is_array($input_data) || empty($input_data))
+            return false;
 
+        $this->input_data = $input_data;
+
+        return $this->input_data;
+    }
 
     /******************************************************************
     *                                                                 *
@@ -199,18 +163,36 @@ class configurator
     {
         return $this->config;
     }
- 
+    
     /**
      * Add the field
      * 
-     * @param  string $translation The translation
-     * @param  string $name The name of the field. This is optional, if no name is provided a name will be generated.
+     * @param  string $label The translation
+     * @param  string $tech_name The name of the field. This is optional, if no name is provided a name will be generated.
      */
-    private function add_field($translation, $name = null)
+    private function add_field($label, $tech_name = null)
     {
         $this->mapped_fields[]    = [
-                                    'translation'    => $translation,
-                                    'name'           => $name
+                                    'translation'    => $label,
+                                    'field_name'           => $tech_name
+                                ];
+
+        return $this;
+    }
+
+    /**
+     * Add the field with data loaded from a taxonomy
+     * 
+     * @param  string $label The translation
+     * @param  string $taxonomy_id The taxonomy id
+     * @param  string $tech_name The name of the field. This is optional, if no name is provided a name will be generated.
+     */
+    private function add_field_with_taxonomy($label, $taxonomy_id, $tech_name = null)
+    {
+        $this->mapped_fields[]    = [
+                                    'translation'    => $label,
+                                    'taxonomy_id'    => $taxonomy_id,
+                                    'field_name'           => $tech_name
                                 ];
 
         return $this;
@@ -219,18 +201,25 @@ class configurator
     /**
      * Set the mapped field config
      * 
+     * @param  string $tech_name The technical name of the field.
+     * @param  string $value The value of the field.
      * @return  object Returns $this
      */
-    public function set_field_config($name, $value)
+    private function set_field_config($tech_name, $value)
     {
         end($this->mapped_fields);
         $key = key($this->mapped_fields);
 
-        $this->mapped_fields[ $key ][$name] = $value;
+        $this->mapped_fields[ $key ][$tech_name] = $value;
 
         return $this;
     }
 
+    /** 
+     * Set the ajax template.
+     * 
+     * @param  string $template The template file location (will be used via get_template_part($template) )
+     */
     public function set_ajax_template($template)
     {
         $this->config['template'] = $template;

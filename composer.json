@@ -1,6 +1,7 @@
 {
 	"require": {
-		"mrkoopie/wp_wrapper": "^1.2"
+		"mrkoopie/wp_wrapper": "^1.2",
+		"league/flysystem": "^1.0"
 	},
     "require-dev": {
         "phpspec/phpspec": "^2.4",

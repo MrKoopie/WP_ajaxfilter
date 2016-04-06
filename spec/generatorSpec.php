@@ -12,6 +12,9 @@ class generatorSpec extends ObjectBehavior
 
 	protected $default = [
 						'form_id'		=> 'some_id',
+                        'taxonomy_id'   => 'some_taxonomy_id',
+                        'field_name'    => 'some_field',
+                        'translation'   => 'some translation'
 					];
 
     function it_is_initializable()
@@ -21,6 +24,38 @@ class generatorSpec extends ObjectBehavior
         // Should extend configurator
         $this->shouldBeAnInstanceOf('MrKoopie\WP_ajaxfilter\configurator');
     }
+
+    function it_can_fail_when_rendering_without_any_data()
+    {
+    	$this->shouldThrow('MrKoopie\WP_ajaxfilter\Exceptions\no_data_to_render_exception')
+    		 ->during('render');
+    }
+
+    function it_can_render()
+    {
+        $this->add_checkbox($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name']);
+
+        // Call three times add_action
+        $this->mockery_WP_wrapper
+             ->shouldReceive('add_action')
+             ->times(3);
+
+        $this->render();
+    }
+
+    // function it_can_generate_html()
+    // {
+    //     $this->add_checkbox($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name']);
+        
+    //     $this->mockery_WP_wrapper
+    //         ->shouldReceive('get_site_url')
+    //         ->withNoArgs()
+    //         ->once()
+    //         ->shouldReceive('get_terms')
+    //         ->with($this->default['taxonomy_id']);
+
+    //     $this->html();
+    // }
 
     /******************************************************************
     *                                                                 *
@@ -35,4 +70,12 @@ class generatorSpec extends ObjectBehavior
 		$this->mockery_WP_wrapper   = Mockery::mock('MrKoopie\WP_wrapper\WP_wrapper');
 		$this->beConstructedWith($this->default['form_id'], $this->mockery_WP_wrapper);
 	}
+
+    /**
+     * Process Mockery
+     */
+    public function letGo()
+    {
+        Mockery::close();
+    }
 }

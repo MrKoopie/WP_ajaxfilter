@@ -32,22 +32,22 @@ The code is designed to have a controller inside your functions.php (or any file
  * the filter and is used as a selector in jQuery.
  */
 ajax_filter('your_filter_id')
-							// Configure the input fields
-							->add_text(__('Company'), 's' )
-                            ->add_checkbox(__('Province'), 'taxonomy_province' )
-                            ->add_dropdown(__('Category'), 'taxonomy_category')
-                            ->add_radiobuttons(__('Support'), 'taxonomy_support')
+    // Configure the input fields
+    ->add_text(__('Company'), 's', 'optional_tech_name_s')
+    ->add_checkbox(__('Province'), 'taxonomy_province', 'optional_tech_name_province')
+    ->add_dropdown(__('Category'), 'taxonomy_category', 'optional_tech_name_category')
+    ->add_radiobuttons(__('Support'), 'taxonomy_support', 'optional_tech_name_support')
 
-                            // The jQuery script will make an ajax call, set the
-                            // template filter here. The filter will use
-                            // get_template_part('your_ajax_template'), so you
-                            // can use the same input method.
-                            ->set_ajax_template('your_ajax_template')
+    // The jQuery script will make an ajax call, set the
+    // template filter here. The filter will use
+    // get_template_part('your_ajax_template'), so you
+    // can use the same input method.
+    ->set_ajax_template('your_ajax_template')
 
-                            // By running render, we activate the query filter 
-                            // and create the ajax listener.
-                            ->render();
-
+    // By running render, we activate the query filter 
+    // and create the ajax listener.
+    ->render();
+    
 # template.php
 /**
  * This command outputs the HTML form. Keep in mind that you have to put
@@ -56,21 +56,24 @@ ajax_filter('your_filter_id')
 ajax_filter('your_filter_id')->html();
 ```
 
-###### add_text($label, $field = 's' )
+###### add_text($label, $field = 's', $tech_name )
 $label is shown in the <label> tag.
 With $field you define the field where the filter applies to. Set this to s (default) to use the default WordPress search fields.
 
-###### add_checkbox($label, $taxonomy_id )
+###### add_checkbox($label, $taxonomy_id, $tech_name )
 $label is shown in the <label> tag.
 $taxonomy_id is the id of the taxonomy where the data is loaded of.
+$tech_name This name is used for the technical field name (which is shown in every GET request).
 
-###### add_dropdown($label, $taxonomy_id )
+###### add_dropdown($label, $taxonomy_id, $tech_name )
 $label is shown in the <label> tag.
 $taxonomy_id is the id of the taxonomy where the data is loaded of.
+$tech_name This name is used for the technical field name (which is shown in every GET request).
 
-###### add_radiobuttons($label, $taxonomy_id )
+###### add_radiobuttons($label, $taxonomy_id, $tech_name )
 $label is shown in the <label> tag.
 $taxonomy_id is the id of the taxonomy where the data is loaded of.
+$tech_name This name is used for the technical field name (which is shown in every GET request).
 
 ##### set_ajax_template($template_name)
 $template_name is the name of your template inside your theme. This template is used to show the results of the filter.
@@ -80,8 +83,6 @@ With this function the query filter is set and the ajax call is registered.
 
 # Todo
 Add support for:
-
-- Pretty technical names
 - Comparison methods
 
 

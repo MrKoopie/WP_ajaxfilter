@@ -13,7 +13,7 @@ class configuratorSpec extends ObjectBehavior
 						'form_id'		=> 'some_id',
 						'field_name' 	=> 'some_field',
 						'translation'	=> 'some translation',
-						'taxonomy_name'	=> 'categories',
+						'taxonomy_id'	=> 'categories',
 						'data_array'	=> ['key' => 'value'],
 						'url'			=> 'http://some_url',
 						'template'		=> 'your_ajax_template',
@@ -35,12 +35,13 @@ class configuratorSpec extends ObjectBehavior
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
 								'translation' 	=> $this->default['translation'],
-								'name'			=> $this->default['field_name'],
+								'taxonomy_id'   => $this->default['taxonomy_id'],
+								'field_name'			=> $this->default['field_name'],
 								'type'			=> 'checkbox'
 							  ];
 
 		// Set the checkbox
-		$this->add_checkbox($this->default['translation'], $this->default['field_name'])
+		$this->add_checkbox($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
@@ -52,12 +53,13 @@ class configuratorSpec extends ObjectBehavior
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
 								'translation' 	=> $this->default['translation'],
-								'name'			=> $this->default['field_name'],
+								'taxonomy_id'   => $this->default['taxonomy_id'],
+								'field_name'			=> $this->default['field_name'],
 								'type'			=> 'radiobutton'
 							  ];
 
 		// Set the radiobutton
-		$this->add_radiobutton($this->default['translation'], $this->default['field_name'])
+		$this->add_radiobutton($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
@@ -69,96 +71,31 @@ class configuratorSpec extends ObjectBehavior
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
 								'translation' 	=> $this->default['translation'],
-								'name'			=> $this->default['field_name'],
+								'taxonomy_id'   => $this->default['taxonomy_id'],
+								'field_name'			=> $this->default['field_name'],
 								'type'			=> 'dropdown'
 							  ];
 
 		// Set the dropdown
-		$this->add_dropdown($this->default['translation'], $this->default['field_name'])
+		$this->add_dropdown($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name'])
 			 ->shouldReturn($this);
 
 		$this->get_mapped_fields()
 			 ->shouldBe($expected_mapped_fields);
 	}
 
-	public function it_can_add_the_field_type_text()
+	public function it_can_add_the_field_type_textfield()
 	{
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
 								'translation' 	=> $this->default['translation'],
-								'name'			=> $this->default['field_name'],
+								'field_name'			=> $this->default['field_name'],
 								'type'			=> 'text'
 							  ];
 
 		// Set the dropdown
 		$this->add_textfield($this->default['translation'], $this->default['field_name'])
 			 ->shouldReturn($this);
-
-		$this->get_mapped_fields()
-			 ->shouldBe($expected_mapped_fields);
-	}
-
-	/******************************************************************
-	*                                                                 *
-	*                     TESTING LOADING METHODS                     *
-	*                                                                 *
-	******************************************************************/
-
-	public function it_can_load_data_from_a_taxonomy()
-	{
-		// Preload the required fields
-		$this->preload_one_checkbox();
-
-
-		// Generate the return value
-		$return_value_object = new \stdClass;
-		$return_value_object->id = 0;
-		$return_value_object->name = 'name';
-
-		$return_value[] = $return_value_object;
-
-		// Generate get_terms and set the return data.
-		$this->mockery_WP_wrapper
-			 ->shouldReceive('get_terms')
-			 ->with($this->default['taxonomy_name'])
-			 ->andReturn($return_value)
-			 ->once();
-
-		// Load the data
-		$this->load_data_from_a_taxonomy($this->default['taxonomy_name'])
-			 ->shouldReturn($this);
-
-		// Set the expected settings
-		$expected_mapped_fields[]    	= [
-								'translation'        => $this->default['translation'],
-								'name'               => $this->default['field_name'],
-								'type'				 => 'checkbox',
-								'data_source'        => 'taxonomy',
-								'data_taxonomy_name' => $this->default['taxonomy_name'],
-								'data_array'		 => [ 0 => 'name']
-							  ];
-
-		$this->get_mapped_fields()
-			 ->shouldBe($expected_mapped_fields);
-	}
-
-	public function it_can_load_data_from_an_array()
-	{
-		// Preload the required fields
-		$this->preload_one_checkbox();
-
-		// Load the data
-		$this->load_data_from_an_array($this->default['data_array'])
-			 ->shouldReturn($this);
-
-		// Set the expected settings
-		$expected_mapped_fields[]    	= [
-								'translation'        => $this->default['translation'],
-								'name'               => $this->default['field_name'],
-								'type'				 => 'checkbox',
-								'data_source'        => 'array',
-								'data_array' 		 => $this->default['data_array']
-							  ];
 
 		$this->get_mapped_fields()
 			 ->shouldBe($expected_mapped_fields);
@@ -208,7 +145,7 @@ class configuratorSpec extends ObjectBehavior
 			 
 	}
 
-	public function it_can_set_the_url()
+	public function it_can_set_the_action()
 	{
 		$this->set_action($this->default['url'])
 			 ->shouldReturn($this);
@@ -224,14 +161,29 @@ class configuratorSpec extends ObjectBehavior
 			 ->shouldBe($expected_config);
 	}
 
+	public function it_can_not_load_empty_input_data()
+	{
+		$input_data = null;
+
+		$this->load_input_data($input_data)
+			->shouldReturn(false);
+	}
+
+	public function it_can_load_input_data()
+	{
+		$input_data = [
+						's' => 'string'
+						];
+
+		$this->load_input_data($input_data)
+			->shouldReturn($input_data);
+	}
+
 	/******************************************************************
 	*                                                                 *
 	*                   TESTING SETTING THE TEMPLATE                  *
 	*                                                                 *
 	******************************************************************/
-	/**
-	 * @todo  this
-	 */
 	public function it_can_set_the_template()
 	{
 		$this->set_ajax_template($this->default['template']);
