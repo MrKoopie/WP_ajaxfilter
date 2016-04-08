@@ -16,7 +16,7 @@ Add to your functions.php the following code:
 function ajax_filter($filter_id)
 {
     if(!isset($GLOBALS['WP_ajaxfilter'][$filter_id]))
-        $GLOBALS['WP_ajaxfilter'][$filter_id] = new MrKoopie/WP_ajaxfilter/generator($filter_id);
+        $GLOBALS['WP_ajaxfilter'][$filter_id] = new MrKoopie\WP_ajaxfilter\generator($filter_id);
     
     return $GLOBALS['WP_ajaxfilter'][$filter_id];
 }
