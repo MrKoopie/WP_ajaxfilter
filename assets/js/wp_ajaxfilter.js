@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
 
 		// Compile the required data
         var data = {
-            'action': 'wpf_' + html_block, // With this the template knows it should send back an ajax response
+            'action': 'wpf_' + form_id, // With this the template knows it should send back an ajax response
             'mrka_id': form_id,
             'mrka_val' : filter_data
         };
