@@ -13,7 +13,7 @@ composer require mrkoopie/wp_ajaxfilter
 
 Add to your functions.php the following code:
 ```php
-function ajaxfilter($filter_id)
+function ajax_filter($filter_id)
 {
     if(!isset($GLOBALS['WP_ajaxfilter'][$filter_id]))
         $GLOBALS['WP_ajaxfilter'][$filter_id] = new MrKoopie/WP_ajaxfilter/generator($filter_id);
