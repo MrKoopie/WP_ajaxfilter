@@ -15,7 +15,6 @@ jQuery(document).ready(function($) {
 		// Store the data
 		var filter_data = [];
 		var html_block = "#" + $(this).attr('data-MRK-ajax-filter');
-		var form_id = $(this).attr('id');
 		var form_action = $(this).attr('action');
 
 		// Prevent that the browser processes the form
@@ -39,13 +38,13 @@ jQuery(document).ready(function($) {
 
 		// Compile the required data
         var data = {
-            'action': 'wpf_' + form_id, // With this the template knows it should send back an ajax response
-            'mrka_id': form_id,
+            'action': 'wpf_' + html_block, // With this the template knows it should send back an ajax response
+            'mrka_id': html_block,
             'mrka_val' : filter_data
         };
 
         // Change the URL
-        history.pushState(null, null, '?mrka_id=' + form_id + '&mrka_val=' + filter_data);
+        history.pushState(null, null, '?mrka_id=' + html_block + '&mrka_val=' + filter_data);
 
         // Make the Ajax call
         jQuery.get(form_action, data, function(response) {
