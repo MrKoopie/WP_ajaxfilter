@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
         };
 
         // Change the URL
-        history.pushState(null, null, '?mrka_id=' + html_block + '&mrka_val=' + filter_data);
+        history.pushState(null, null, '?mrka_id=' + form_id + '&mrka_val=' + filter_data);
 
         // Make the Ajax call
         jQuery.get(form_action, data, function(response) {
