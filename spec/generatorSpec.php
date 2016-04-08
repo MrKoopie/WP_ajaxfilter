@@ -67,7 +67,7 @@ class generatorSpec extends ObjectBehavior
         $this->mockery_WP_wrapper
             // It should register the script
             ->shouldReceive('wp_register_script')
-            ->with('MRK-ajax-filter', 'http/../wp-theme-starter/theme/MrKoopie/WP_ajaxfilter/assets/js/wp_ajaxfilter.js', ['jquery'])
+            ->with('MRK-ajax-filter', 'http/vendor/mrkoopie/wp_ajaxfilter/assets/js/wp_ajaxfilter.js', ['jquery'])
             ->once()
 
             // // Fake the url
