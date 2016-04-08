@@ -1,0 +1,4 @@
+<form method="get" id="{{form_id}}" action="{{site_url}}" data-MRK-ajax-filter="{{form_id}}">
+	<input type="hidden" name="action" value="{{form_id}}">
+	{{fields}}
+</form>

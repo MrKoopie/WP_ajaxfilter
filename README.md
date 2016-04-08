@@ -1,6 +1,6 @@
 # WP_ajaxfilter
 
-This package is developed to be a part of a WordPress theme or plugin. By installing this code you can add an advanced filter without writing every piece of HTML, PHP, javascript and CSS code.
+This package is developed to be a part of a WordPress theme or plugin. By installing this code you can add an advanced filter without writing every piece of HTML, PHP, javascript and CSS code. The package is still in development and may not 
 
 ## How to install
 Run the following command:
@@ -33,11 +33,8 @@ The code is designed to have a controller inside your functions.php (or any file
  */
 ajax_filter('your_filter_id')
     // Configure the input fields
-    ->add_text(__('Company'), 's', 'optional_tech_name_s')
     ->add_checkbox(__('Province'), 'taxonomy_province', 'optional_tech_name_province')
-    ->add_dropdown(__('Category'), 'taxonomy_category', 'optional_tech_name_category')
-    ->add_radiobuttons(__('Support'), 'taxonomy_support', 'optional_tech_name_support')
-
+    
     // The jQuery script will make an ajax call, set the
     // template filter here. The filter will use
     // get_template_part('your_ajax_template'), so you
@@ -56,21 +53,7 @@ ajax_filter('your_filter_id')
 ajax_filter('your_filter_id')->html();
 ```
 
-###### add_text($label, $field = 's', $tech_name )
-$label is shown in the <label> tag.
-With $field you define the field where the filter applies to. Set this to s (default) to use the default WordPress search fields.
-
 ###### add_checkbox($label, $taxonomy_id, $tech_name )
-$label is shown in the <label> tag.
-$taxonomy_id is the id of the taxonomy where the data is loaded of.
-$tech_name This name is used for the technical field name (which is shown in every GET request).
-
-###### add_dropdown($label, $taxonomy_id, $tech_name )
-$label is shown in the <label> tag.
-$taxonomy_id is the id of the taxonomy where the data is loaded of.
-$tech_name This name is used for the technical field name (which is shown in every GET request).
-
-###### add_radiobuttons($label, $taxonomy_id, $tech_name )
 $label is shown in the <label> tag.
 $taxonomy_id is the id of the taxonomy where the data is loaded of.
 $tech_name This name is used for the technical field name (which is shown in every GET request).
@@ -85,6 +68,20 @@ With this function the query filter is set and the ajax call is registered.
 Add support for:
 - Comparison methods
 
+###### TODO: add_dropdown($label, $taxonomy_id, $tech_name )
+
+$label is shown in the <label> tag.
+$taxonomy_id is the id of the taxonomy where the data is loaded of.
+$tech_name This name is used for the technical field name (which is shown in every GET request).
+
+###### TODO: add_radiobuttons($label, $taxonomy_id, $tech_name )
+$label is shown in the <label> tag.
+$taxonomy_id is the id of the taxonomy where the data is loaded of.
+$tech_name This name is used for the technical field name (which is shown in every GET request).
+
+###### TODO: add_text($label, $field = 's', $tech_name )
+$label is shown in the <label> tag.
+With $field you define the field where the filter applies to. Set this to s (default) to use the default WordPress search fields.
 
 # FAQ
 

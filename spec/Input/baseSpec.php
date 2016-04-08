@@ -22,15 +22,6 @@ class baseSpec extends ObjectBehavior
         $this->shouldHaveType('MrKoopie\WP_ajaxfilter\Input\Base');
     }
 
-    function it_can_load_input_data()
-    {
-
-        $this->set_input_data($this->default['input_data']);
-
-        $this->get_input_data()
-             ->shouldBe($this->default['input_data']);
-    }
-
     function it_can_load_data_from_a_taxonomy()
     {
         /**
@@ -64,6 +55,15 @@ class baseSpec extends ObjectBehavior
 
         $this->get_taxonomy_data()
             ->shouldBe($taxonomy);
+    }
+
+    function it_can_load_input_data()
+    {
+
+        $this->set_input_data($this->default['input_data']);
+
+        $this->get_input_data()
+             ->shouldBe($this->default['input_data']);
     }
 
     /******************************************************************

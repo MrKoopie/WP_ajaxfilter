@@ -15,7 +15,8 @@ class stubSpec extends ObjectBehavior
 
 	// Set up the default data
 	protected $default = [
-						'file_name' => '',// Should be a real filename
+						'filename'              => 'some_filename',
+						'non_existing_filename' => 'non_existing_filename',
 						];
     function it_is_initializable()
     {
@@ -25,7 +26,7 @@ class stubSpec extends ObjectBehavior
     function it_can_list_stubs()
     {
 		$return_list_contents[] = [
-			'filename' => $this->default['file_name'],
+			'filename' => $this->default['filename'],
 			'extension' => 'stub'
 		];
 
@@ -41,7 +42,7 @@ class stubSpec extends ObjectBehavior
     function it_can_parse_a_stub()
     {
 		$return_list_contents[] = [
-									'filename' => $this->default['file_name'],
+									'filename' => $this->default['filename'],
 									'extension' => 'stub'
 									];
 		$this->mockery_fileystem
@@ -55,8 +56,26 @@ class stubSpec extends ObjectBehavior
     	$parameters = [
 						'replace_this' => 'replacement'
 		];
-    	$this->parse_stub($this->default['file_name'], $parameters)
+    	$this->parse_stub($this->default['filename'], $parameters)
     		 ->shouldBe('<replacement>');
+    }
+
+    function it_can_return_an_exception_when_a_stub_does_not_exist()
+    {
+		$return_list_contents[] = [
+									'filename' => $this->default['filename'],
+									'extension' => 'stub'
+									];
+		$this->mockery_fileystem
+			->shouldReceive('listContents')
+			->andReturn($return_list_contents)
+			->once();
+
+    	$parameters = [
+						'replace_this' => 'replacement'
+		];
+    	$this->shouldThrow('MrKoopie\WP_ajaxfilter\Exceptions\stub_not_found_exception')
+    		->during('parse_stub',[$this->default['non_existing_filename'], $parameters]);
     }
 
     /******************************************************************

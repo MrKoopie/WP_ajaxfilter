@@ -44,7 +44,7 @@ class base
      */
     public function load_data_from_taxonomy($taxonomy_id)
     {
-        $this->taxonomy_id = $taxonomy_id;
+        $this->taxonomy_id   = $taxonomy_id;
         $this->taxonomy_data = $this->WP_wrapper->get_terms($taxonomy_id);
     }
 

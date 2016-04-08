@@ -10,6 +10,7 @@ class configurator
     protected $input_data;
     protected $WP_wrapper;
     protected $config;
+    protected $post_type = 'post';
 
     /**
      * WordPress does not have dependency injection.
@@ -93,6 +94,26 @@ class configurator
     ******************************************************************/
 
     /**
+     * Set the custom post type
+     * 
+     * @param  string $post_type The custom post type
+     */
+    public function set_post_type($post_type)
+    {
+        $this->post_type = $post_type;
+
+        return $this;
+    }
+
+    /**
+     * Get the set post type
+     */
+    public function get_post_type()
+    {
+        return $this->post_type;
+    }
+
+    /**
      * Set the form method
      * 
      * @param string $method The method. Can be post or get.
@@ -123,28 +144,6 @@ class configurator
     }
 
     /**
-     * Load the input data
-     *
-     * @param $input_data
-     * @return array|bool
-     */
-    public function load_input_data($input_data)
-    {
-        if(!is_array($input_data) || empty($input_data))
-            return false;
-
-        $this->input_data = $input_data;
-
-        return $this->input_data;
-    }
-
-    /******************************************************************
-    *                                                                 *
-    *                             VARIOUS                             *
-    *                                                                 *
-    ******************************************************************/
-
-    /**
      * Get the mapped_fields
      * 
      * @return  array The mapped fields.
@@ -163,6 +162,40 @@ class configurator
     {
         return $this->config;
     }
+
+    /** 
+     * Set the ajax template.
+     * 
+     * @param  string $template The template file location (will be used via get_template_part($template) )
+     */
+    public function set_ajax_template($template)
+    {
+        $this->config['template'] = $template;
+
+        return $this;
+    }
+
+    /**
+     * Load the input data
+     *
+     * @param $input_data
+     * @return array|bool
+     */
+    public function load_input_data($input_data)
+    {
+        if(!is_array($input_data) || empty($input_data))
+            return false;
+
+        $this->input_data = $input_data;
+
+        return $this->input_data;
+    }
+
+    /******************************************************************
+    *                                                                 *
+    *                             HELPERS                             *
+    *                                                                 *
+    ******************************************************************/
     
     /**
      * Add the field
@@ -192,7 +225,7 @@ class configurator
         $this->mapped_fields[]    = [
                                     'translation'    => $label,
                                     'taxonomy_id'    => $taxonomy_id,
-                                    'field_name'           => $tech_name
+                                    'field_name'     => $tech_name
                                 ];
 
         return $this;
@@ -213,15 +246,5 @@ class configurator
         $this->mapped_fields[ $key ][$tech_name] = $value;
 
         return $this;
-    }
-
-    /** 
-     * Set the ajax template.
-     * 
-     * @param  string $template The template file location (will be used via get_template_part($template) )
-     */
-    public function set_ajax_template($template)
-    {
-        $this->config['template'] = $template;
     }
 }

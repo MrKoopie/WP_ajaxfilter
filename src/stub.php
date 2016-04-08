@@ -3,6 +3,7 @@
 namespace MrKoopie\WP_ajaxfilter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use \MrKoopie\WP_ajaxfilter\Exceptions\stub_not_found_exception;
 
 /**
  * Class stub. Parses a stub template with parameters.
@@ -93,16 +94,14 @@ class stub
 		$stubs = $this->list_stubs();
 
 		foreach ($stubs as $stub) {
-			echo $stub;
-			echo $file_name;
 			if ($stub == $file_name) {
 				$found_stub = true;
 				break;
 			}
 		}
 
-		if($found_stub != true)
-			return false;
+		if(!isset($found_stub) || $found_stub != true)
+			throw new stub_not_found_exception($file_name);
 
 		return true;
 	}

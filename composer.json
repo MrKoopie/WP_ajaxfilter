@@ -1,4 +1,7 @@
 {
+    "name": "mrkoopie/wp_ajaxfilter",
+    "description": "Generate HTML forms and filter archive data in WordPress",
+    "keywords": [ "wordpress", "archive filter", "ajax"],
 	"require": {
 		"mrkoopie/wp_wrapper": "^1.2",
 		"league/flysystem": "^1.0"

@@ -17,16 +17,25 @@ class checkbox extends Base implements input,input_with_taxonomy
      */
     public function generate_html()
     {
+        // Prepare the input data
+        $input_data = $this->prepare_input_data();
+
         $checkboxes = '';
-        foreach($this->taxonomy_data as $term)
+        foreach($this->taxonomy_data as $taxonomy)
         {
+            unset($parameters);
             $parameters = [
                 'field_name' => $this->field_name,
-                'value' => $term->slug,
-                'label' => $term->name
+                'value' => $taxonomy->slug,
+                'label' => $taxonomy->name
             ];
+            
+            if(isset($input_data [$taxonomy->slug]))
+                $parameters['checked'] = ' checked';
+            else
+                $parameters['checked'] = '';
 
-            $checkboxes .= $this->stub->parse_stub('checkbox-parameter', $parameters)."\n";
+            $checkboxes .= $this->stub->parse_stub('input-checkbox-parameter', $parameters)."\n";
         }
 
         unset($parameters);
@@ -36,18 +45,64 @@ class checkbox extends Base implements input,input_with_taxonomy
             'checkboxes'    => $checkboxes
         ];
 
-        $return = $this->stub->parse_stub('checkbox', $parameters)."\n";
+        $return = $this->stub->parse_stub('input-checkbox', $parameters)."\n";
 
         return $return;
     }
 
     /**
-     * Generate the filter
-     * @param  object $WP_Query The WP_Query
-     * @return object The $WP_Query.
+     * Generate the filter.
+     * @param  object $query The query
+     * @return object The $query.
      */
-    public function filter($WP_Query)
+    public function filter($query)
     {
+        // Prepare the input data
+        $input_data = $this->prepare_input_data();
 
+        // Foreach all the taxonomy data
+        foreach($this->taxonomy_data as $taxonomy)
+        {
+            // Check if we have some input for $taxonomy
+            if(isset($input_data [$taxonomy->slug]))
+                $tax_query_id[] = $taxonomy->term_id;
+        }
+
+        // Check if we have some filter data to configure in the query
+        if(isset($tax_query_id))
+        {  
+            // We do! We need to add the filter as an array in an array.
+            $tax_query[] = [ 
+                            'taxonomy' => $this->taxonomy_id,
+                            'field'    => 'id', 
+                            'terms'    => $tax_query_id
+                        ]; 
+
+            // Set the filter.
+            $query->set('tax_query', $tax_query);
+            
+        }
+        
+
+        return $query;
+    }
+
+    /******************************************************************
+    *                                                                 *
+    *                             HELPERS                             *
+    *                                                                 *
+    ******************************************************************/
+
+    /**
+     * Flip the input data
+     * 
+     * @return  array The original value as name
+     */
+    private function prepare_input_data()
+    {
+        if(!empty($this->input_data))
+            return array_flip($this->input_data);
+        else
+            return [];
     }
 }

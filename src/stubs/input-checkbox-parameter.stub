@@ -1,0 +1,2 @@
+<input type="checkbox" id="{{field_name}}{{value}}" name="{{field_name}}" value="{{value}}"{{checked}}>
+<label for="{{field_name}}{{value}}" class="checkbox">{{label}}</label>

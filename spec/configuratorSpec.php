@@ -17,6 +17,7 @@ class configuratorSpec extends ObjectBehavior
 						'data_array'	=> ['key' => 'value'],
 						'url'			=> 'http://some_url',
 						'template'		=> 'your_ajax_template',
+						'post_type'		=> 'some_post_type',
 					];
 
 	public function it_is_initializable()
@@ -106,6 +107,15 @@ class configuratorSpec extends ObjectBehavior
 	*                 TESTING SETTING CONFIG OPTIONS                  *
 	*                                                                 *
 	******************************************************************/
+
+	public function it_can_set_the_post_type()
+	{
+		$this->set_post_type($this->default['post_type']);
+
+		$this->get_post_type()
+			->shouldBe($this->default['post_type']);
+	}
+
 	public function it_can_set_the_post_method()
 	{
 		$this->set_method('post')
@@ -184,7 +194,7 @@ class configuratorSpec extends ObjectBehavior
 	*                   TESTING SETTING THE TEMPLATE                  *
 	*                                                                 *
 	******************************************************************/
-	public function it_can_set_the_template()
+	public function it_can_set_the_ajax_template()
 	{
 		$this->set_ajax_template($this->default['template']);
 
