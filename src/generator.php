@@ -55,7 +55,7 @@ class generator extends configurator
 	 */
 	public function enqueue_scripts()
 	{
-		$this->WP_wrapper->wp_register_script( 'MRK-ajax-filter', $this->WP_wrapper->get_stylesheet_directory_uri() . '/../wp-theme-starter/theme/MrKoopie/WP_ajaxfilter/assets/js/wp_ajaxfilter.js', ['jquery']);
+		$this->WP_wrapper->wp_register_script( 'MRK-ajax-filter', $this->WP_wrapper->get_stylesheet_directory_uri() . '/vendor/mrkoopie/wp_ajaxfilter/assets/js/wp_ajaxfilter.js', ['jquery']);
 
 		// Localize the script with new data
 		$translation_array = array(
