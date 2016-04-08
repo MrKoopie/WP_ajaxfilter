@@ -7,7 +7,7 @@ use \MrKoopie\WP_ajaxfilter\Contracts\input_with_taxonomy;
  * Class Checkbox
  * @package MrKoopie\WP_ajaxfilter\Input
  */
-class checkbox extends Base implements input,input_with_taxonomy
+class checkbox extends base implements input,input_with_taxonomy
 {
 
 
