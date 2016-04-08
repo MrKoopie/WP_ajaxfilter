@@ -36,6 +36,7 @@ jQuery(document).ready(function($) {
 
 		// Set the loading screen
 		$( html_block ).html( mrka.loading );
+		$( html_block ).addClass('mrk-loading');
 
 		// Compile the required data
         var data = {
@@ -51,6 +52,7 @@ jQuery(document).ready(function($) {
         jQuery.get(form_action, data, function(response) {
         	//Show the results
             $( html_block ).html(response);
+            $( html_block ).removeClass('mrk-loading');
         });
 		
 	}); 
