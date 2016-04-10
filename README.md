@@ -13,10 +13,10 @@ composer require mrkoopie/wp_ajaxfilter
 
 Add to your functions.php the following code:
 ```php
-function ajax_filter($filter_id)
+function ajaxfilter($filter_id)
 {
     if(!isset($GLOBALS['WP_ajaxfilter'][$filter_id]))
-        $GLOBALS['WP_ajaxfilter'][$filter_id] = new MrKoopie\WP_ajaxfilter\generator($filter_id);
+        $GLOBALS['WP_ajaxfilter'][$filter_id] = new MrKoopie/WP_ajaxfilter/generator($filter_id);
     
     return $GLOBALS['WP_ajaxfilter'][$filter_id];
 }
@@ -66,6 +66,12 @@ $template_name is the name of your template inside your theme. This template is 
 
 ##### render()
 With this function the query filter is set and the ajax call is registered.
+
+## How to override the stubs
+1. Create in your theme the directory overrides/wp_ajaxfilter_stubs/.
+2. Create every stub file that you want to override there.
+
+__The stubs are designed to be flexible and should allow you to create the correct styling. If you feel this is not the case, please make a pull request with an improved stub file.__
 
 # Todo
 Add support for:
