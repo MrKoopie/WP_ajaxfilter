@@ -99,7 +99,7 @@ class configurator
      * @param string $taxonomy_id The $taxonomy_id
      * @return  object $this
      */
-    public function load_data_from_a_taxonomy($taxonomy_id)
+    public function load_data_from_taxonomy($taxonomy_id)
     {
         $this->set_field_config('data_source', 'taxonomy');
         $this->set_field_config('taxonomy_id', $taxonomy_id);

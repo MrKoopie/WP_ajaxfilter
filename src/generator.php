@@ -145,10 +145,8 @@ class generator extends configurator
                 $mapped_field['class']->load_data_from_array($mapped_field['filter_data']);
 
             if(isset($this->input_data[$mapped_field['field_name']]))
-            {
-            	echo '123134';
             	$mapped_field['class']->set_input_data($this->input_data[$mapped_field['field_name']]);
-            }
+
 
 			$fields .= $mapped_field['class']->generate_html();
 		}

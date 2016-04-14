@@ -135,7 +135,7 @@ class generatorSpec extends ObjectBehavior
         // Set everything up
         $tmp_taxonomy = $this->setup_taxonomy_with_tests();
 
-        $this->load_data_from_a_taxonomy($this->default['taxonomy_id']);
+        $this->load_data_from_taxonomy($this->default['taxonomy_id']);
 
         $_GET['mrka_val'] = urlencode($this->default['field_name'].'='.$tmp_taxonomy->slug);
 
@@ -159,7 +159,7 @@ class generatorSpec extends ObjectBehavior
     {
         $tmp_taxonomy = $this->setup_taxonomy_with_tests();
 
-        $this->load_data_from_a_taxonomy($this->default['taxonomy_id']);
+        $this->load_data_from_taxonomy($this->default['taxonomy_id']);
 
         /**
          * Set the expected parameters

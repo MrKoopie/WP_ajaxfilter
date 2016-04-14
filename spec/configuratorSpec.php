@@ -106,7 +106,7 @@ class configuratorSpec extends ObjectBehavior
 	*                                                                 *
 	******************************************************************/
 
-	public function it_can_load_data_from_a_taxonomy()
+	public function it_can_load_data_from_taxonomy()
 	{
 		// Set the expected settings
 		$expected_mapped_fields[]    	= [
@@ -120,7 +120,7 @@ class configuratorSpec extends ObjectBehavior
 		// Set the checkbox
 		$this->add_checkbox($this->default['translation'], $this->default['field_name'])
 			 ->shouldReturn($this)
-			 ->load_data_from_a_taxonomy($this->default['taxonomy_id']);
+			 ->load_data_from_taxonomy($this->default['taxonomy_id']);
 
 		$this->get_mapped_fields()
 			 ->shouldBe($expected_mapped_fields);
