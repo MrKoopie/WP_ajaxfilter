@@ -92,7 +92,7 @@ class generator extends configurator
 	public function filter_query($query)
 	{
 		// We only need to execute this code when we have found the key that belongs to this form.
-		if(isset($_GET['mrka_id']) && $_GET['mrka_id'] == $this->config['form_id'])
+		if(isset($_GET['mrka_id']) && $_GET['mrka_id'] == $this->config['form_id'] && $query->get('post_type') == $this->post_type)
 		{
 			$this->load_field_classes();
 
