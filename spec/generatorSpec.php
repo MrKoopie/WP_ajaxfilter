@@ -147,6 +147,11 @@ class generatorSpec extends ObjectBehavior
                         ]; 
 
         // Set the expected query function, this ensures that the filter is being set.
+        $query->shouldReceive('get')
+            ->with('post_type')
+            ->andReturn('post')
+            ->once();
+
         $query->shouldReceive('set')
             ->with('tax_query', $tax_query)
             ->once();
