@@ -19,22 +19,22 @@ class checkbox extends base implements input,input_with_taxonomy
     {
         // Prepare the input data
         $input_data = $this->prepare_input_data();
-
+        
         $checkboxes = '';
-        foreach($this->taxonomy_data as $taxonomy)
+        foreach($this->filter_data as $taxonomy)
         {
             unset($parameters);
             $parameters = [
                 'field_name' => $this->field_name,
-                'value' => $taxonomy->slug,
-                'label' => $taxonomy->name
+                'value' => $taxonomy['slug'],
+                'label' => $taxonomy['label']
             ];
             
-            if(isset($input_data [$taxonomy->slug]))
+            if(isset($input_data [$taxonomy['slug']]))
                 $parameters['checked'] = ' checked';
             else
                 $parameters['checked'] = '';
-
+            
             $checkboxes .= $this->stub->parse_stub('input-checkbox-parameter', $parameters)."\n";
         }
 
@@ -57,15 +57,19 @@ class checkbox extends base implements input,input_with_taxonomy
      */
     public function filter($query)
     {
+        // We do not do anything when the data source is an array.
+        if($this->data_source == 'array')
+            return $query;
+
         // Prepare the input data
         $input_data = $this->prepare_input_data();
 
         // Foreach all the taxonomy data
-        foreach($this->taxonomy_data as $taxonomy)
+        foreach($this->filter_data as $taxonomy)
         {
             // Check if we have some input for $taxonomy
-            if(isset($input_data [$taxonomy->slug]))
-                $tax_query_id[] = $taxonomy->term_id;
+            if(isset($input_data [$taxonomy['slug']]))
+                $tax_query_id[] = $taxonomy['term_id'];
         }
 
         // Check if we have some filter data to configure in the query

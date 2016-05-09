@@ -3,6 +3,7 @@
 namespace MrKoopie\WP_ajaxfilter;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use \MrKoopie\WP_wrapper\WP_wrapper;
 use \MrKoopie\WP_ajaxfilter\Exceptions\stub_not_found_exception;
 
 /**
@@ -13,36 +14,59 @@ use \MrKoopie\WP_ajaxfilter\Exceptions\stub_not_found_exception;
 class stub
 {
 	protected $filesystem;
-	protected $fly_filesystem;
-	protected $fly_local;
-	protected $list_stubs_cache;
+	protected $fly_original_filesystem;
+	protected $fly_overriden_filesystem;
+	protected $list_original_stubs_cache;
+	protected $list_overridden_stubs_cache;
 
-	public function __construct($fly_filesystem = null, $fly_local = null)
+	public function __construct($WP_wrapper = null, $fly_local = null, $fly_original_filesystem = null, $fly_overridden_filesystem = null)
 	{
-		$stubs_dir = __DIR__ . '/stubs/';
+		if($WP_wrapper != null)
+            $this->WP_wrapper = $WP_wrapper;
+        else
+            $this->WP_wrapper = new WP_wrapper();
+
+		$original_stubs_dir 	= __DIR__ . '/stubs/';
+		$overriden_stubs_dir 	= $this->WP_wrapper->get_stylesheet_directory()."/overrides/wp_ajaxfilter_stubs/";
+
+
 
 		if($fly_local != null)
-			$this->fly_local       = $fly_local;
-		else 
-			$this->fly_local       = new Local($stubs_dir);
+		{
+			$fly_original_local   		= $fly_local;
+			$fly_overridden_local       = $fly_local;
 
-		if($fly_filesystem != null)
-			$this->fly_filesystem  = $fly_filesystem;
+		}
+		else 
+		{
+			$fly_original_local       	= new Local($original_stubs_dir);
+			$fly_overridden_local       = new Local($overriden_stubs_dir);
+		}
+
+		if($fly_original_filesystem != null)
+		{
+			$this->fly_original_filesystem  = $fly_original_filesystem;
+		}
 		else
-			$this->fly_filesystem  = new Filesystem($this->fly_local);
+			$this->fly_original_filesystem  = new Filesystem($fly_original_local);
+
+		if($fly_overridden_filesystem != null)
+			$this->fly_overriden_filesystem  = $fly_overridden_filesystem;
+		else
+			$this->fly_overriden_filesystem  = new Filesystem($fly_overridden_local);
 	}
 
 	/** 
 	 * List all stub files
 	 * @return array All stub file names (without .stub)
 	 */
-    public function list_stubs()
+    public function list_original_stubs()
     {
     	// Check if we have cache
-    	if($this->list_stubs_cache != '')
-    		return $this->list_stubs_cache;
+    	if($this->list_original_stubs_cache != '')
+    		return $this->list_original_stubs_cache;
 
-    	$files = $this->fly_filesystem->listContents();
+    	$files = $this->fly_original_filesystem->listContents();
 
     	// Return nothing when the array is empty
     	if(count($files) == 0)
@@ -55,18 +79,48 @@ class stub
     		if($file['extension'] != 'stub')
     			continue;
 
-    		$stubs[] = $file['filename'];
+    		$stubs[$file['filename']] = true;
     	}
 
-    	$this->list_stubs_cache = $stubs;
+    	$this->list_original_stubs_cache = $stubs;
+
+        return $stubs;
+    }
+
+    /** 
+	 * List all overriden stub files
+	 * @return array All stub file names (without .stub)
+	 */
+    public function list_overriden_stubs()
+    {
+    	// Check if we have cache
+    	if($this->list_overridden_stubs_cache != '')
+    		return $this->list_overridden_stubs_cache;
+
+    	$files = $this->fly_overriden_filesystem->listContents();
+
+    	// Return nothing when the array is empty
+    	if(count($files) == 0)
+    		return [];
+
+    	$stubs = [];
+    	foreach($files as $file)
+    	{
+    		// Only parse .stub files
+    		if($file['extension'] != 'stub')
+    			continue;
+
+    		$stubs[$file['filename']] = true;
+    	}
+
+    	$this->list_overridden_stubs_cache = $stubs;
 
         return $stubs;
     }
 
     public function parse_stub($file_name, $parameters)
     {
-		if(!$this->check_if_stub_exists($file_name))
-			return false;
+		$this->check_if_original_stub_exists($file_name);
 
 
 		$replace = [];
@@ -77,7 +131,10 @@ class stub
 			$replace_with[] = $value;
 		}
 
-		$stub = $this->fly_filesystem->read($file_name . '.stub');
+		if($this->check_if_overridden_stub_exists($file_name) != false)
+			$stub = $this->fly_overriden_filesystem->read($file_name . '.stub');
+		else
+			$stub = $this->fly_original_filesystem->read($file_name . '.stub');
 
 		$stub = str_replace($replace, $replace_with, $stub);
 
@@ -89,19 +146,27 @@ class stub
 	 *
 	 * @param $file_name
 	 */
-	private function check_if_stub_exists($file_name)
+	private function check_if_original_stub_exists($file_name)
 	{
-		$stubs = $this->list_stubs();
+		$stubs = $this->list_original_stubs();
 
-		foreach ($stubs as $stub) {
-			if ($stub == $file_name) {
-				$found_stub = true;
-				break;
-			}
-		}
-
-		if(!isset($found_stub) || $found_stub != true)
+		if(!isset($this->list_original_stubs_cache[$file_name]))
 			throw new stub_not_found_exception($file_name);
+
+		return true;
+	}
+
+	/**
+	 * Verifies if a stub exists.
+	 *
+	 * @param $file_name
+	 */
+	private function check_if_overridden_stub_exists($file_name)
+	{
+		$this->list_overriden_stubs();
+
+		if(!isset($this->list_overridden_stubs_cache[$file_name]))
+			return false;
 
 		return true;
 	}

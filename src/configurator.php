@@ -38,9 +38,9 @@ class configurator
      * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_checkbox($label, $taxonomy_id, $tech_name = null)
+    public function add_checkbox($label, $tech_name = null)
     {
-        $this->add_field_with_taxonomy($label, $taxonomy_id, $tech_name);
+        $this->add_field($label, $tech_name);
 
         return $this->set_field_config('type', 'checkbox');
     }
@@ -52,9 +52,9 @@ class configurator
      * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_radiobutton($label, $taxonomy_id, $tech_name = null)
+    public function add_radiobutton($label, $tech_name = null)
     {
-        $this->add_field_with_taxonomy($label, $taxonomy_id, $tech_name);
+        $this->add_field($label, $tech_name);
 
         return $this->set_field_config('type', 'radiobutton');
     }
@@ -66,9 +66,9 @@ class configurator
      * @param  string $tech_name The technical field name of the field.
      * @return  object Returns $this
      */
-    public function add_dropdown($label, $taxonomy_id, $tech_name = null)
+    public function add_dropdown($label, $tech_name = null)
     {
-        $this->add_field_with_taxonomy($label, $taxonomy_id, $tech_name);
+        $this->add_field($label, $tech_name);
 
         return $this->set_field_config('type', 'dropdown');
     }
@@ -85,6 +85,40 @@ class configurator
         $this->add_field($label, $tech_name);
 
         return $this->set_field_config('type', 'text');
+    }
+
+    /******************************************************************
+    *                                                                 *
+    *                           DATA LOADERS                          *
+    *                                                                 *
+    ******************************************************************/
+
+    /**
+     * Load the data from a taxonomy
+     * 
+     * @param string $taxonomy_id The $taxonomy_id
+     * @return  object $this
+     */
+    public function load_data_from_taxonomy($taxonomy_id)
+    {
+        $this->set_field_config('data_source', 'taxonomy');
+        $this->set_field_config('taxonomy_id', $taxonomy_id);
+
+        return $this;
+    }
+
+    /**
+     * Load the data from an array
+     * 
+     * @param string $array The $array in the format []['slug', 'label']
+     * @return  object $this
+     */
+    public function load_data_from_an_array($array)
+    {
+        $this->set_field_config('data_source', 'array');
+        $this->set_field_config('filter_data', $array);
+
+        return $this;
     }
 
     /******************************************************************
@@ -175,22 +209,6 @@ class configurator
         return $this;
     }
 
-    /**
-     * Load the input data
-     *
-     * @param $input_data
-     * @return array|bool
-     */
-    public function load_input_data($input_data)
-    {
-        if(!is_array($input_data) || empty($input_data))
-            return false;
-
-        $this->input_data = $input_data;
-
-        return $this->input_data;
-    }
-
     /******************************************************************
     *                                                                 *
     *                             HELPERS                             *
@@ -208,24 +226,6 @@ class configurator
         $this->mapped_fields[]    = [
                                     'translation'    => $label,
                                     'field_name'           => $tech_name
-                                ];
-
-        return $this;
-    }
-
-    /**
-     * Add the field with data loaded from a taxonomy
-     * 
-     * @param  string $label The translation
-     * @param  string $taxonomy_id The taxonomy id
-     * @param  string $tech_name The name of the field. This is optional, if no name is provided a name will be generated.
-     */
-    private function add_field_with_taxonomy($label, $taxonomy_id, $tech_name = null)
-    {
-        $this->mapped_fields[]    = [
-                                    'translation'    => $label,
-                                    'taxonomy_id'    => $taxonomy_id,
-                                    'field_name'     => $tech_name
                                 ];
 
         return $this;

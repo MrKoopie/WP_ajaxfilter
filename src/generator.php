@@ -105,13 +105,18 @@ class generator extends configurator
 				if(isset($mapped_field['taxonomy_id']))
 	                $mapped_field['class']->load_data_from_taxonomy($mapped_field['taxonomy_id']);
 
-	            if(isset($this->filter_data[$mapped_field['field_name']]))
-	            	$mapped_field['class']->set_input_data($this->filter_data[$mapped_field['field_name']]);
+	            // Load data from an array
+	           	if(isset($mapped_field['filter_data']))
+	                $mapped_field['class']->load_data_from_array($mapped_field['filter_data']);
+
+	            if(isset($this->input_data[$mapped_field['field_name']]))
+	            	$mapped_field['class']->set_input_data($this->input_data[$mapped_field['field_name']]);
 
 				$query = $mapped_field['class']->filter($query);
 			}
 
 		}
+		
 		return $query;
 	}
 
@@ -135,8 +140,13 @@ class generator extends configurator
 			if(isset($mapped_field['taxonomy_id']))
                 $mapped_field['class']->load_data_from_taxonomy($mapped_field['taxonomy_id']);
 
-            if(isset($this->filter_data[$mapped_field['field_name']]))
-	            	$mapped_field['class']->set_input_data($this->filter_data[$mapped_field['field_name']]);
+            // Load data from an array
+           	if(isset($mapped_field['filter_data']))
+                $mapped_field['class']->load_data_from_array($mapped_field['filter_data']);
+
+            if(isset($this->input_data[$mapped_field['field_name']]))
+            	$mapped_field['class']->set_input_data($this->input_data[$mapped_field['field_name']]);
+
 
 			$fields .= $mapped_field['class']->generate_html();
 		}
@@ -197,7 +207,7 @@ class generator extends configurator
 			{	
 				$split_raw_filter_data = explode('=', $raw_filter_data);
 
-				$this->filter_data[ $split_raw_filter_data[0] ][] = $split_raw_filter_data[1];
+				$this->input_data[ $split_raw_filter_data[0] ][] = $split_raw_filter_data[1];
 			}
 		}
 

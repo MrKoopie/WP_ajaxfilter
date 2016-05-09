@@ -135,6 +135,8 @@ class generatorSpec extends ObjectBehavior
         // Set everything up
         $tmp_taxonomy = $this->setup_taxonomy_with_tests();
 
+        $this->load_data_from_taxonomy($this->default['taxonomy_id']);
+
         $_GET['mrka_val'] = urlencode($this->default['field_name'].'='.$tmp_taxonomy->slug);
 
         // Set the expected return data
@@ -161,6 +163,8 @@ class generatorSpec extends ObjectBehavior
     function it_can_generate_html()
     {
         $tmp_taxonomy = $this->setup_taxonomy_with_tests();
+
+        $this->load_data_from_taxonomy($this->default['taxonomy_id']);
 
         /**
          * Set the expected parameters
@@ -237,7 +241,7 @@ class generatorSpec extends ObjectBehavior
             ->once();
 
 
-        $this->add_checkbox($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name']);
+        $this->add_checkbox($this->default['translation'], $this->default['field_name']);
 
         return $tmp_taxonomy;
     }

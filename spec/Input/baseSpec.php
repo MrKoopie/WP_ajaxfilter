@@ -53,8 +53,27 @@ class baseSpec extends ObjectBehavior
         $this->get_taxonomy_id()
             ->shouldBe($this->default['taxonomy_id']);
 
-        $this->get_taxonomy_data()
-            ->shouldBe($taxonomy);
+        // Prepare the return taxonomy
+        $tmp_filter_data['slug']    = $tmp_taxonomy->slug;
+        $tmp_filter_data['label']   = $tmp_taxonomy->name;
+        $tmp_filter_data['term_id'] = $tmp_taxonomy->term_id;
+        $return_filter_data[] = $tmp_filter_data;
+        
+        $this->get_filter_data()
+            ->shouldBe($return_filter_data);
+    }
+
+    function it_can_load_data_from_an_array()
+    {
+        $tmp_input_data['slug']  = 'sample-slug';
+        $tmp_input_data['label'] = 'sample-label';
+        
+        $input_data[] = $tmp_input_data;
+
+        $this->load_data_from_array($input_data);
+
+        $this->get_filter_data()
+            ->shouldBe($input_data);
     }
 
     function it_can_load_input_data()
