@@ -46,7 +46,9 @@ jQuery(document).ready(function($) {
         };
 
         // Change the URL
-        history.pushState(null, null, '?mrka_id=' + form_id + '&mrka_val=' + filter_data);
+        var current_url = '';
+        current_url = current_url.replace(/(\/page\/([0-9]*)\/)/i,"\/");
+        history.pushState(null, null, current_url + '?mrka_id=' + form_id + '&mrka_val=' + filter_data);
 
         // Make the Ajax call
         jQuery.get(form_action, data, function(response) {
