@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
         };
 
         // Change the URL
-        var current_url = '';
+        var current_url = window.location.href.split('?')[0];
         current_url = current_url.replace(/(\/page\/([0-9]*)\/)/i,"\/");
         history.pushState(null, null, current_url + '?mrka_id=' + form_id + '&mrka_val=' + filter_data);
 
