@@ -56,6 +56,11 @@ class generatorSpec extends ObjectBehavior
              // Set the query filter
              ->shouldReceive('add_action')
              ->with('pre_get_posts', Mockery::any())
+             ->once()
+
+              // Configure the shortcode
+             ->shouldReceive('add_shortcode')
+             ->with('ajax_filter', Mockery::any())
              ->once();
 
         $this->render()
@@ -113,6 +118,20 @@ class generatorSpec extends ObjectBehavior
         $this->set_ajax_template($this->default['ajax_template']);
 
         $this->ajax();
+    }
+
+    function it_can_process_a_shortcode()
+    {
+        $this->mockery_WP_wrapper
+            ->shouldReceive('ajax_filter')
+            ->with($this->default['form_id'])
+            ->andReturn($this->mockery_WP_wrapper)
+            ->once()
+            ->shouldReceive('html')
+            ->once();
+
+        $args = ['form' => $this->default['form_id']];
+        $this->shortcode($args);
     }
 
     function it_does_not_add_a_filter_query_when_no_input_data_is_provided()
