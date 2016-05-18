@@ -1,11 +1,12 @@
 <?php
+
 namespace MrKoopie\WP_ajaxfilter\Input;
-use MrKoopie\WP_wrapper\WP_wrapper;
+
 use MrKoopie\WP_ajaxfilter\stub;
+use MrKoopie\WP_wrapper\WP_wrapper;
 
 /**
- * Class Checkbox
- * @package MrKoopie\WP_ajaxfilter\Input
+ * Class Checkbox.
  */
 class base
 {
@@ -19,7 +20,7 @@ class base
     // protected $filter_options;
 
     /**
-     * Can be taxonomy or array
+     * Can be taxonomy or array.
      */
     protected $data_source;
     protected $filter_data;
@@ -30,35 +31,36 @@ class base
      */
     public function __construct($label, $field_name, $WP_wrapper = null, $stub = null)
     {
-        $this->label     = $label;
+        $this->label = $label;
         $this->field_name = $field_name;
 
-        if($WP_wrapper != null)
+        if ($WP_wrapper != null) {
             $this->WP_wrapper = $WP_wrapper;
-        else
+        } else {
             $this->WP_wrapper = new WP_wrapper();
+        }
 
-        if($stub != null)
+        if ($stub != null) {
             $this->stub = $stub;
-        else
+        } else {
             $this->stub = new stub();
+        }
     }
 
     /**
-     * Load the taxonomy data from WordPress
+     * Load the taxonomy data from WordPress.
      *
      * @param $taxonomy_id The $taxonomy_id of WordPress
      */
     public function load_data_from_taxonomy($taxonomy_id)
     {
-        $this->taxonomy_id   = $taxonomy_id;
-        $this->data_source   = 'taxonomy';
+        $this->taxonomy_id = $taxonomy_id;
+        $this->data_source = 'taxonomy';
 
         $terms = $this->WP_wrapper->get_terms($taxonomy_id);
-        foreach($terms as $taxonomy)
-        {
-            $tmp_taxonomy['slug']    = $taxonomy->slug;
-            $tmp_taxonomy['label']   = $taxonomy->name;
+        foreach ($terms as $taxonomy) {
+            $tmp_taxonomy['slug'] = $taxonomy->slug;
+            $tmp_taxonomy['label'] = $taxonomy->name;
             $tmp_taxonomy['term_id'] = $taxonomy->term_id;
 
             $this->filter_data[] = $tmp_taxonomy;
@@ -67,7 +69,7 @@ class base
     }
 
     /**
-     * Load the array
+     * Load the array.
      *
      * @param array $array The $array in the format []['slug', 'label']
      */
@@ -75,10 +77,9 @@ class base
     {
         $this->data_source = 'array';
 
-        foreach($array as $key => $data)
-        {
-            $tmp_data['slug']    = $data['slug'];
-            $tmp_data['label']   = $data['label'];
+        foreach ($array as $key => $data) {
+            $tmp_data['slug'] = $data['slug'];
+            $tmp_data['label'] = $data['label'];
 
             $this->filter_data[] = $tmp_data;
             unset($tmp_data);
@@ -114,7 +115,7 @@ class base
     }
 
     /**
-     * @return  array The filter data.
+     * @return array The filter data.
      */
     public function get_filter_data()
     {
