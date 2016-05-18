@@ -2,11 +2,10 @@
 
 namespace MrKoopie\WP_ajaxfilter\Contracts;
 
-
 interface input_with_taxonomy
 {
     /**
-     * Load the taxonomy data from WordPress
+     * Load the taxonomy data from WordPress.
      *
      * @param $taxonomy_id The WordPress Taxonomy id
      */

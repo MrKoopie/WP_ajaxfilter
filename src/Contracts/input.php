@@ -1,4 +1,5 @@
 <?php
+
 namespace MrKoopie\WP_ajaxfilter\Contracts;
 
 interface input
@@ -9,18 +10,21 @@ interface input
      */
     public function __construct($label, $tech_name);
 
-	/** 
-	 * Generate the HTML code for this Input method.
-	 * @return String The HTML code.
-	 */
-	public function generate_html();
+    /**
+     * Generate the HTML code for this Input method.
+     *
+     * @return string The HTML code.
+     */
+    public function generate_html();
 
-	/**
-	 * Generate the filter
-	 * @param  object $WP_Query The WP_Query
-	 * @return object The $WP_Query.
-	 */
-	public function filter($WP_Query);
+    /**
+     * Generate the filter.
+     *
+     * @param object $WP_Query The WP_Query
+     *
+     * @return object The $WP_Query.
+     */
+    public function filter($WP_Query);
 
     /**
      * Pass the input data to the input type.

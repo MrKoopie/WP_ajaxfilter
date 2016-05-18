@@ -2,24 +2,23 @@
 
 namespace spec\MrKoopie\WP_ajaxfilter;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Mockery;
+use PhpSpec\ObjectBehavior;
 
 class generatorSpec extends ObjectBehavior
 {
-	private $mockery_WP_wrapper;
+    private $mockery_WP_wrapper;
 
-	protected $default = [
-                        'ajax_template' => 'ajax_template_file',
-						'form_id'		=> 'some_id',
-                        'taxonomy_id'   => 'some_taxonomy_id',
-                        'field_name'    => 'some_field',
-                        'translation'   => 'some translation'
-					];
+    protected $default = [
+                        'ajax_template'  => 'ajax_template_file',
+                        'form_id'        => 'some_id',
+                        'taxonomy_id'    => 'some_taxonomy_id',
+                        'field_name'     => 'some_field',
+                        'translation'    => 'some translation',
+                    ];
     protected $mockery_stub;
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('MrKoopie\WP_ajaxfilter\generator');
 
@@ -27,13 +26,13 @@ class generatorSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('MrKoopie\WP_ajaxfilter\configurator');
     }
 
-    function it_can_fail_when_rendering_without_any_data()
+    public function it_can_fail_when_rendering_without_any_data()
     {
-    	$this->shouldThrow('MrKoopie\WP_ajaxfilter\Exceptions\no_data_to_render_exception')
-    		 ->during('render');
+        $this->shouldThrow('MrKoopie\WP_ajaxfilter\Exceptions\no_data_to_render_exception')
+             ->during('render');
     }
 
-    function it_can_render()
+    public function it_can_render()
     {
         $this->add_checkbox($this->default['translation'], $this->default['taxonomy_id'], $this->default['field_name']);
 
@@ -42,10 +41,10 @@ class generatorSpec extends ObjectBehavior
 
             // Register the ajax calls
              ->shouldReceive('add_action')
-             ->with('wp_ajax_wpf_' . $this->default['form_id'], Mockery::any())
+             ->with('wp_ajax_wpf_'.$this->default['form_id'], Mockery::any())
              ->once()
              ->shouldReceive('add_action')
-             ->with('wp_ajax_nopriv_wpf_' . $this->default['form_id'], Mockery::any())
+             ->with('wp_ajax_nopriv_wpf_'.$this->default['form_id'], Mockery::any())
              ->once()
 
              // Enqueue the scripts
@@ -62,7 +61,7 @@ class generatorSpec extends ObjectBehavior
             ->shouldBe($this);
     }
 
-    function it_can_enqueue_scripts()
+    public function it_can_enqueue_scripts()
     {
         $this->mockery_WP_wrapper
             // It should register the script
@@ -93,7 +92,7 @@ class generatorSpec extends ObjectBehavior
         $this->enqueue_scripts();
     }
 
-    function it_can_handle_ajax_requests()
+    public function it_can_handle_ajax_requests()
     {
         $this->mockery_WP_wrapper
             // Mock the query
@@ -115,7 +114,7 @@ class generatorSpec extends ObjectBehavior
         $this->ajax();
     }
 
-    function it_does_not_add_a_filter_query_when_no_input_data_is_provided()
+    public function it_does_not_add_a_filter_query_when_no_input_data_is_provided()
     {
         // Mock the query
         $query = Mockery::mock('WP_Query');
@@ -124,13 +123,13 @@ class generatorSpec extends ObjectBehavior
             ->shouldBe($query);
     }
 
-    function it_can_add_a_filter_query()
+    public function it_can_add_a_filter_query()
     {
         // Mock the wp_query
         $query = Mockery::mock('WP_Query');
 
         // Simulate that input data is provided
-        $_GET['mrka_id']  = $this->default['form_id'];
+        $_GET['mrka_id'] = $this->default['form_id'];
 
         // Set everything up
         $tmp_taxonomy = $this->setup_taxonomy_with_tests();
@@ -140,11 +139,11 @@ class generatorSpec extends ObjectBehavior
         $_GET['mrka_val'] = urlencode($this->default['field_name'].'='.$tmp_taxonomy->slug);
 
         // Set the expected return data
-        $tax_query[] = [ 
+        $tax_query[] = [
                             'taxonomy' => $this->default['taxonomy_id'],
-                            'field'    => 'id', 
-                            'terms'    => [$tmp_taxonomy->term_id]
-                        ]; 
+                            'field'    => 'id',
+                            'terms'    => [$tmp_taxonomy->term_id],
+                        ];
 
         // Set the expected query function, this ensures that the filter is being set.
         $query->shouldReceive('get')
@@ -160,24 +159,24 @@ class generatorSpec extends ObjectBehavior
             ->shouldBe($query);
     }
 
-    function it_can_generate_html()
+    public function it_can_generate_html()
     {
         $tmp_taxonomy = $this->setup_taxonomy_with_tests();
 
         $this->load_data_from_taxonomy($this->default['taxonomy_id']);
 
-        /**
+        /*
          * Set the expected parameters
          */
         $checkbox_parameter_expected_arguments = [
             'field_name' => $this->default['field_name'],
             'value'      => $tmp_taxonomy->slug,
             'label'      => $tmp_taxonomy->name,
-            'checked'    => ''
+            'checked'    => '',
         ];
         $expected_return_checkbox_parameter = 'expected_return_checkbox_parameter';
 
-        /**
+        /*
          * We do not need to test if MrKoopie\WP_ajaxfilter\stub works properly, as this is done in a different test
          */
         $this->mockery_stub
@@ -197,15 +196,13 @@ class generatorSpec extends ObjectBehavior
             ->with('form', \Mockery::any())
             ->andReturn('end_value')
             ->once();
-        
+
         $this->mockery_WP_wrapper
             ->shouldReceive('get_site_url')
             ->withNoArgs()
             ->once()
             ->shouldReceive('get_terms')
             ->with($this->default['taxonomy_id']);
-
-
 
         $this->html()
             ->shouldBeString();
@@ -218,21 +215,21 @@ class generatorSpec extends ObjectBehavior
     ******************************************************************/
     protected function setup_taxonomy_with_tests()
     {
-        /**
+        /*
          * Prepare the taxonomy data
          */
-        $tmp_taxonomy                   = new \stdClass();
-        $tmp_taxonomy->term_id          = 1;
-        $tmp_taxonomy->name             = 'Geen categorie';
-        $tmp_taxonomy->slug             = 'geen-categorie';
-        $tmp_taxonomy->term_group       = 0;
+        $tmp_taxonomy = new \stdClass();
+        $tmp_taxonomy->term_id = 1;
+        $tmp_taxonomy->name = 'Geen categorie';
+        $tmp_taxonomy->slug = 'geen-categorie';
+        $tmp_taxonomy->term_group = 0;
         $tmp_taxonomy->term_taxonomy_id = 1;
-        $tmp_taxonomy->taxonomy         = 'category';
-        $tmp_taxonomy->description      = null;
-        $tmp_taxonomy->parent           = 0;
-        $tmp_taxonomy->count            = 2;
-        $tmp_taxonomy->filter           = 'raw';
-        
+        $tmp_taxonomy->taxonomy = 'category';
+        $tmp_taxonomy->description = null;
+        $tmp_taxonomy->parent = 0;
+        $tmp_taxonomy->count = 2;
+        $tmp_taxonomy->filter = 'raw';
+
         $taxonomy[] = $tmp_taxonomy;
 
         $this->mockery_WP_wrapper->shouldReceive('get_terms')
@@ -240,24 +237,23 @@ class generatorSpec extends ObjectBehavior
             ->andReturn($taxonomy)
             ->once();
 
-
         $this->add_checkbox($this->default['translation'], $this->default['field_name']);
 
         return $tmp_taxonomy;
     }
 
-	/**
-	 * Initialize the class
-	 */
-	public function let()
-	{
-		$this->mockery_WP_wrapper = Mockery::mock('MrKoopie\WP_wrapper\WP_wrapper');
-        $this->mockery_stub       = Mockery::mock('MrKoopie\WP_wrapper\stub');
-		$this->beConstructedWith($this->default['form_id'], $this->mockery_WP_wrapper, $this->mockery_stub);
-	}
+    /**
+     * Initialize the class.
+     */
+    public function let()
+    {
+        $this->mockery_WP_wrapper = Mockery::mock('MrKoopie\WP_wrapper\WP_wrapper');
+        $this->mockery_stub = Mockery::mock('MrKoopie\WP_wrapper\stub');
+        $this->beConstructedWith($this->default['form_id'], $this->mockery_WP_wrapper, $this->mockery_stub);
+    }
 
     /**
-     * Process Mockery
+     * Process Mockery.
      */
     public function letGo()
     {
