@@ -1,8 +1,9 @@
 <?php
 
 namespace MrKoopie\WP_ajaxfilter;
-use MrKoopie\WP_wrapper\WP_wrapper;
+
 use MrKoopie\WP_ajaxfilter\Exceptions\no_such_method_exists_exception;
+use MrKoopie\WP_wrapper\WP_wrapper;
 
 class configurator
 {
@@ -19,10 +20,11 @@ class configurator
     {
         $this->config['form_id'] = $form_id;
 
-        if($WP_wrapper != null)
+        if ($WP_wrapper != null) {
             $this->WP_wrapper = $WP_wrapper;
-        else
+        } else {
             $this->WP_wrapper = new WP_wrapper();
+        }
     }
 
     /******************************************************************
@@ -32,11 +34,12 @@ class configurator
     ******************************************************************/
 
     /**
-     * Sets the last field type to checkbox
+     * Sets the last field type to checkbox.
      *
-     * @param  string $label The translation of the field.
-     * @param  string $tech_name The technical field name of the field.
-     * @return  object Returns $this
+     * @param string $label     The translation of the field.
+     * @param string $tech_name The technical field name of the field.
+     *
+     * @return object Returns $this
      */
     public function add_checkbox($label, $tech_name = null)
     {
@@ -46,11 +49,12 @@ class configurator
     }
 
     /**
-     * Sets the last field type to radiobutton
+     * Sets the last field type to radiobutton.
      *
-     * @param  string $label The translation of the field.
-     * @param  string $tech_name The technical field name of the field.
-     * @return  object Returns $this
+     * @param string $label     The translation of the field.
+     * @param string $tech_name The technical field name of the field.
+     *
+     * @return object Returns $this
      */
     public function add_radiobutton($label, $tech_name = null)
     {
@@ -60,11 +64,12 @@ class configurator
     }
 
     /**
-     * Sets the last field type to dropdown
+     * Sets the last field type to dropdown.
      *
-     * @param  string $label The translation of the field.
-     * @param  string $tech_name The technical field name of the field.
-     * @return  object Returns $this
+     * @param string $label     The translation of the field.
+     * @param string $tech_name The technical field name of the field.
+     *
+     * @return object Returns $this
      */
     public function add_dropdown($label, $tech_name = null)
     {
@@ -74,11 +79,12 @@ class configurator
     }
 
     /**
-     * Sets the last field type to text
+     * Sets the last field type to text.
      *
-     * @param  string $label The translation of the field.
-     * @param  string $tech_name The technical field name of the field.
-     * @return  object Returns $this
+     * @param string $label     The translation of the field.
+     * @param string $tech_name The technical field name of the field.
+     *
+     * @return object Returns $this
      */
     public function add_textfield($label, $tech_name = null)
     {
@@ -94,10 +100,11 @@ class configurator
     ******************************************************************/
 
     /**
-     * Load the data from a taxonomy
-     * 
+     * Load the data from a taxonomy.
+     *
      * @param string $taxonomy_id The $taxonomy_id
-     * @return  object $this
+     *
+     * @return object $this
      */
     public function load_data_from_taxonomy($taxonomy_id)
     {
@@ -108,10 +115,11 @@ class configurator
     }
 
     /**
-     * Load the data from an array
-     * 
+     * Load the data from an array.
+     *
      * @param string $array The $array in the format []['slug', 'label']
-     * @return  object $this
+     *
+     * @return object $this
      */
     public function load_data_from_an_array($array)
     {
@@ -128,9 +136,9 @@ class configurator
     ******************************************************************/
 
     /**
-     * Set the custom post type
-     * 
-     * @param  string $post_type The custom post type
+     * Set the custom post type.
+     *
+     * @param string $post_type The custom post type
      */
     public function set_post_type($post_type)
     {
@@ -140,7 +148,7 @@ class configurator
     }
 
     /**
-     * Get the set post type
+     * Get the set post type.
      */
     public function get_post_type()
     {
@@ -148,26 +156,26 @@ class configurator
     }
 
     /**
-     * Set the form method
-     * 
+     * Set the form method.
+     *
      * @param string $method The method. Can be post or get.
      */
     public function set_method($method)
     {
-        if($method == 'post')
+        if ($method == 'post') {
             $this->config['method'] = 'post';
-
-        elseif($method == 'get')
+        } elseif ($method == 'get') {
             $this->config['method'] = 'get';
-        else
-            throw new no_such_method_exists_exception('The method ' . $method . ' is not supported');
+        } else {
+            throw new no_such_method_exists_exception('The method '.$method.' is not supported');
+        }
 
         return $this;
     }
 
     /**
-     * Set the action
-     * 
+     * Set the action.
+     *
      * @param string $action The action (URL) where the data should be send to.
      */
     public function set_action($action)
@@ -178,9 +186,9 @@ class configurator
     }
 
     /**
-     * Get the mapped_fields
-     * 
-     * @return  array The mapped fields.
+     * Get the mapped_fields.
+     *
+     * @return array The mapped fields.
      */
     public function get_mapped_fields()
     {
@@ -188,19 +196,19 @@ class configurator
     }
 
     /**
-     * Get the config
-     * 
-     * @return  array The config settings.
+     * Get the config.
+     *
+     * @return array The config settings.
      */
     public function get_config_settings()
     {
         return $this->config;
     }
 
-    /** 
+    /**
      * Set the ajax template.
-     * 
-     * @param  string $template The template file location (will be used via get_template_part($template) )
+     *
+     * @param string $template The template file location (will be used via get_template_part($template) )
      */
     public function set_ajax_template($template)
     {
@@ -214,36 +222,37 @@ class configurator
     *                             HELPERS                             *
     *                                                                 *
     ******************************************************************/
-    
+
     /**
-     * Add the field
-     * 
-     * @param  string $label The translation
-     * @param  string $tech_name The name of the field. This is optional, if no name is provided a name will be generated.
+     * Add the field.
+     *
+     * @param string $label     The translation
+     * @param string $tech_name The name of the field. This is optional, if no name is provided a name will be generated.
      */
     private function add_field($label, $tech_name = null)
     {
-        $this->mapped_fields[]    = [
-                                    'translation'    => $label,
-                                    'field_name'           => $tech_name
+        $this->mapped_fields[] = [
+                                    'translation'          => $label,
+                                    'field_name'           => $tech_name,
                                 ];
 
         return $this;
     }
 
     /**
-     * Set the mapped field config
-     * 
-     * @param  string $tech_name The technical name of the field.
-     * @param  string $value The value of the field.
-     * @return  object Returns $this
+     * Set the mapped field config.
+     *
+     * @param string $tech_name The technical name of the field.
+     * @param string $value     The value of the field.
+     *
+     * @return object Returns $this
      */
     private function set_field_config($tech_name, $value)
     {
         end($this->mapped_fields);
         $key = key($this->mapped_fields);
 
-        $this->mapped_fields[ $key ][$tech_name] = $value;
+        $this->mapped_fields[$key][$tech_name] = $value;
 
         return $this;
     }

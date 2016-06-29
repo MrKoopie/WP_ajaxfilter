@@ -2,41 +2,40 @@
 
 namespace spec\MrKoopie\WP_ajaxfilter\Input;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use Mockery;
+use PhpSpec\ObjectBehavior;
 
 class checkboxSpec extends ObjectBehavior
 {
     private $default = [
-        'label_name'    => 'label',
+        'label_name'     => 'label',
         'field_name'     => 'field_name',
-        'taxonomy_id'   => 'taxonomy_id'
+        'taxonomy_id'    => 'taxonomy_id',
     ];
     private $mockery_WP_wrapper;
     private $mockery_stub;
 
-    function it_is_initializable()
+    public function it_is_initializable()
     {
         $this->shouldHaveType('MrKoopie\WP_ajaxfilter\Input\Checkbox');
     }
 
-    function it_can_generate_the_html_code_without_input_data()
+    public function it_can_generate_the_html_code_without_input_data()
     {
-        $tmp_taxonomy = $this->setup_taxonomy();   
+        $tmp_taxonomy = $this->setup_taxonomy();
 
-        /**
+        /*
          * Set the expected parameters
          */
         $checkbox_parameter_expected_arguments = [
             'field_name' => $this->default['field_name'],
-            'value' => $tmp_taxonomy->slug,
-            'label' => $tmp_taxonomy->name,
-            'checked' => ''
+            'value'      => $tmp_taxonomy->slug,
+            'label'      => $tmp_taxonomy->name,
+            'checked'    => '',
         ];
         $expected_return_checkbox_parameter = 'expected_return_checkbox_parameter';
 
-        /**
+        /*
          * We do not need to test if MrKoopie\WP_ajaxfilter\stub works properly, as this is done in a different test
          */
         $this->mockery_stub
@@ -57,22 +56,22 @@ class checkboxSpec extends ObjectBehavior
              ->shouldEqual("end_value\n");
     }
 
-    function it_can_generate_the_html_code_with_input_data()
+    public function it_can_generate_the_html_code_with_input_data()
     {
-        $tmp_taxonomy = $this->setup_taxonomy();   
+        $tmp_taxonomy = $this->setup_taxonomy();
 
-        /**
+        /*
          * Set the expected parameters
          */
         $checkbox_parameter_expected_arguments = [
             'field_name' => $this->default['field_name'],
-            'value' => $tmp_taxonomy->slug,
-            'label' => $tmp_taxonomy->name,
-            'checked' => ' checked'
+            'value'      => $tmp_taxonomy->slug,
+            'label'      => $tmp_taxonomy->name,
+            'checked'    => ' checked',
         ];
         $expected_return_checkbox_parameter = 'expected_return_checkbox_parameter';
 
-        /**
+        /*
          * We do not need to test if MrKoopie\WP_ajaxfilter\stub works properly, as this is done in a different test
          */
         $this->mockery_stub
@@ -87,7 +86,7 @@ class checkboxSpec extends ObjectBehavior
             ->andReturn('end_value')
             ->once();
 
-        $input_data = [ 0 => $tmp_taxonomy->slug];
+        $input_data = [0 => $tmp_taxonomy->slug];
         $this->set_input_data($input_data);
 
         $this->load_data_from_taxonomy($this->default['taxonomy_id']);
@@ -96,20 +95,19 @@ class checkboxSpec extends ObjectBehavior
              ->shouldEqual("end_value\n");
     }
 
-    function it_can_filter_with_input_data()
+    public function it_can_filter_with_input_data()
     {
-        $tmp_taxonomy = $this->setup_taxonomy();        
+        $tmp_taxonomy = $this->setup_taxonomy();
 
-        /** Prepare the query */
+        /* Prepare the query */
         $wp_query = Mockery::mock('WP_Query');
 
-
         // Set the expected return data
-        $tax_query[] = [ 
+        $tax_query[] = [
                             'taxonomy' => $this->default['taxonomy_id'],
-                            'field'    => 'id', 
-                            'terms'    => [$tmp_taxonomy->term_id]
-                        ]; 
+                            'field'    => 'id',
+                            'terms'    => [$tmp_taxonomy->term_id],
+                        ];
         $wp_query->shouldReceive('set')
             ->andReturn($wp_query)
             ->with('tax_query', $tax_query)
@@ -118,27 +116,26 @@ class checkboxSpec extends ObjectBehavior
         $input_data[] = $tmp_taxonomy->slug;
         $this->set_input_data($input_data);
 
-        /** Load the taxonomy data */
+        /* Load the taxonomy data */
         $this->load_data_from_taxonomy($this->default['taxonomy_id']);
 
         $this->filter($wp_query)
             ->shouldReturn($wp_query);
     }
 
-    function it_can_filter_withtout_input_data()
+    public function it_can_filter_withtout_input_data()
     {
-        $tmp_taxonomy = $this->setup_taxonomy();   
+        $tmp_taxonomy = $this->setup_taxonomy();
 
-        /** Prepare the query */
+        /* Prepare the query */
         $wp_query = Mockery::mock('WP_Query');
 
-        /** Load the taxonomy data */
+        /* Load the taxonomy data */
         $this->load_data_from_taxonomy($this->default['taxonomy_id']);
 
         $this->filter($wp_query)
             ->shouldReturn($wp_query);
     }
-
 
     /******************************************************************
     *                                                                 *
@@ -147,7 +144,7 @@ class checkboxSpec extends ObjectBehavior
     ******************************************************************/
     protected function setup_taxonomy()
     {
-        /**
+        /*
          * Prepare the taxonomy data
          */
         $tmp_taxonomy = new \stdClass();
@@ -161,7 +158,7 @@ class checkboxSpec extends ObjectBehavior
         $tmp_taxonomy->parent = 0;
         $tmp_taxonomy->count = 2;
         $tmp_taxonomy->filter = 'raw';
-        
+
         $taxonomy[] = $tmp_taxonomy;
 
         $this->mockery_WP_wrapper->shouldReceive('get_terms')
@@ -173,12 +170,12 @@ class checkboxSpec extends ObjectBehavior
     }
 
     /**
-     * Initialize the class
+     * Initialize the class.
      */
     public function let()
     {
         $this->mockery_WP_wrapper = Mockery::mock('MrKoopie\WP_wrapper\WP_wrapper');
-        $this->mockery_stub       = Mockery::mock('MrKoopie\WP_wrapper\stub');
+        $this->mockery_stub = Mockery::mock('MrKoopie\WP_wrapper\stub');
         $this->beConstructedWith($this->default['label_name'], $this->default['field_name'], $this->mockery_WP_wrapper, $this->mockery_stub);
     }
 
@@ -186,6 +183,4 @@ class checkboxSpec extends ObjectBehavior
     {
         Mockery::close();
     }
-    
 }
-
