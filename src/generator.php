@@ -49,6 +49,9 @@ class generator extends configurator
         // Register the WP_query filter
         $this->WP_wrapper->add_action('pre_get_posts', [$this, 'filter_query']);
 
+        // Register the shortcode
+        $this->WP_wrapper->add_shortcode('ajax_filter', [ $this, 'shortcode']);
+
         return $this;
     }
 
@@ -82,6 +85,17 @@ class generator extends configurator
         $this->WP_wrapper->get_template_part($this->config['template']);
 
         $this->WP_wrapper->exit();
+    }
+
+    /**
+     * Process the shortcode ajax_filter.
+     */
+    public function shortcode($atts)
+    {
+        if(isset($atts['form']))
+        {
+            return $this->WP_wrapper->ajax_filter($atts['form'])->html();
+        }
     }
 
     /**
