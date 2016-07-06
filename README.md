@@ -1,7 +1,7 @@
 # WP_ajaxfilter
 [![Total Downloads](https://img.shields.io/packagist/dt/mrkoopie/wp_ajaxfilter.svg)](https://packagist.org/packages/mrkoopie/wp_ajaxfilter)
 [![Latest Stable Version](https://img.shields.io/packagist/v/mrkoopie/wp_ajaxfilter.svg)](https://packagist.org/packages/mrkoopie/wp_ajaxfilter)
-![Build status https://travis-ci.org/MrKoopie/WP_ajaxfilter.svg?branch=master](https://travis-ci.org/MrKoopie/WP_ajaxfilter)
+[![Build status](https://travis-ci.org/MrKoopie/WP_ajaxfilter.svg?branch=master)](https://travis-ci.org/MrKoopie/WP_ajaxfilter)
 
 This package is developed to be a part of a WordPress theme or plugin. By installing this code you can add an advanced filter without writing every piece of HTML, PHP, javascript and CSS code. The package is still in development and may not 
 
