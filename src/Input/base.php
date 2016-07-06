@@ -17,7 +17,6 @@ class base
     protected $label;
     protected $field_name;
     protected $taxonomy_id;
-    // protected $filter_options;
 
     /**
      * Can be taxonomy or array.

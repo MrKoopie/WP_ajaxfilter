@@ -11,15 +11,16 @@ jQuery(document).ready(function($) {
 	console.log('Daniel Koop - wp_ajaxfilter.js is loaded.')
 
 	// Find a form with the data-model data-MRK-ajax-filter
-	$("form[data-MRK-ajax-filter]").change(function( event ) {
+	$("form[data-MRK-ajax-filter]").on('change keypress',function( event ) {
 		// Store the data
 		var filter_data = [];
 		var html_block = "#" + $(this).attr('data-MRK-ajax-filter');
 		var form_id = $(this).attr('data-MRK-ajax-filter');
 		var form_action = $(this).attr('action');
-
+		
 		// Prevent that the browser processes the form
-		event.preventDefault();
+		if(event.type != 'keypress')
+			event.preventDefault();
 
 		// When found, find all checkboxes and text fields to submit
 		$(this).find(':input').each(function(index, value){
@@ -28,6 +29,10 @@ jQuery(document).ready(function($) {
 				// Store the input value
 				if($(this).val() != '')
 					filter_data.push( $(this).attr('name') + '=' + encodeURIComponent($(this).val()) );
+			}
+			else if($(this).attr('type') == 'text' && $(this).val() != '')
+			{
+				filter_data.push( $(this).attr('name') + '=' + encodeURIComponent($(this).val()) );
 			}
 
 		});
